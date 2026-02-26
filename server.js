@@ -381,6 +381,134 @@ const ALL_QUESTIONS = [
     correct: 2,
     explanation: "We are like Gomer \u2014 unfaithful, wandering, even enslaved by our sins. And yet Christ, like Hosea, pursues us, pays the price to redeem us, and loves us with an everlasting love we did nothing to deserve.",
     scripture: "\u201cI will betroth thee unto me for ever; yea, I will betroth thee unto me in righteousness\u201d \u2014 Hosea 2:19"
+  },
+  {
+    story: "The Fountain of Living Waters",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/The_Fountain_of_Life_after_van_Eyck_2.jpg/800px-The_Fountain_of_Life_after_van_Eyck_2.jpg",
+    reference: "Jeremiah 2:13; 17:13",
+    description: "Through the prophet Jeremiah, the Lord declared that His people had committed two evils: they had forsaken Him \u2014 the \u201cfountain of living waters\u201d \u2014 and had hewn out broken cisterns that could hold no water.",
+    question: "What does the \u201cfountain of living waters\u201d represent?",
+    answers: [
+      "The importance of clean water in ancient Israel",
+      "Jesus Christ, the source of eternal life who alone can quench our spiritual thirst",
+      "The temple in Jerusalem where people gathered to worship",
+      "The Jordan River where prophets were baptized"
+    ],
+    correct: 1,
+    explanation: "Just as a living fountain provides fresh, never-ending water, Christ offers us spiritual life that never runs dry. Broken cisterns \u2014 the things of the world \u2014 can never hold or satisfy the way Christ can.",
+    scripture: "\u201cThey have forsaken me the fountain of living waters, and hewed them out cisterns, broken cisterns, that can hold no water\u201d \u2014 Jeremiah 2:13"
+  },
+  {
+    story: "The Rock and Fortress",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Gerard_van_Honthorst_-_King_David_Playing_the_Harp_-_Google_Art_Project.jpg/800px-Gerard_van_Honthorst_-_King_David_Playing_the_Harp_-_Google_Art_Project.jpg",
+    reference: "2 Samuel 22:2\u20134",
+    description: "After the Lord delivered David from all his enemies, David sang a song of praise: \u201cThe Lord is my rock, and my fortress, and my deliverer.\u201d He described God as a shield, a high tower, and a refuge.",
+    question: "How does David\u2019s description of God as a \u201crock\u201d and \u201cfortress\u201d point to Christ?",
+    answers: [
+      "Christ is our immovable foundation and sure protection \u2014 He is the one we can always rely on for safety and strength",
+      "David liked to hide in rocky caves, so this is about geography",
+      "It means God is hard to approach, like a stone wall",
+      "It refers to the stone tablets of the Ten Commandments"
+    ],
+    correct: 0,
+    explanation: "A rock cannot be moved; a fortress cannot be easily broken. David used these images to teach that Christ is our unshakable foundation and our ultimate protector in times of trial.",
+    scripture: "\u201cThe Lord is my rock, and my fortress, and my deliverer\u201d \u2014 2 Samuel 22:2"
+  },
+  {
+    story: "The Refiner\u2019s Fire",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/The_Prophet_Malachi%2C_from_Prophets_and_Sibyls_MET_DP833954.jpg/800px-The_Prophet_Malachi%2C_from_Prophets_and_Sibyls_MET_DP833954.jpg",
+    reference: "Malachi 3:2\u20133",
+    description: "The prophet Malachi described the coming Messiah as being like a \u201crefiner\u2019s fire\u201d and \u201cfuller\u2019s soap.\u201d He would sit as a refiner of silver, purifying the sons of Levi until they could offer righteous offerings unto the Lord.",
+    question: "What does the image of a refiner\u2019s fire teach about Jesus Christ?",
+    answers: [
+      "Christ came to destroy the wicked with literal fire",
+      "It means the last days will be extremely hot",
+      "Christ purifies us through His Atonement \u2014 removing our impurities like a refiner removes dross from precious metal",
+      "It represents the burning of animal sacrifices in the temple"
+    ],
+    correct: 2,
+    explanation: "A silversmith heats silver and carefully removes the impurities until he can see his own reflection in the metal. In the same way, Christ refines us through His Atonement until we reflect His image.",
+    scripture: "\u201cHe shall sit as a refiner and purifier of silver: and he shall purify the sons of Levi\u201d \u2014 Malachi 3:3"
+  },
+  {
+    story: "The Fiery Furnace",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Shadrach%2C_Meshach_and_Abednego_by_J.M.W.Turner_%281832%2C_Tate%29.jpg/800px-Shadrach%2C_Meshach_and_Abednego_by_J.M.W.Turner_%281832%2C_Tate%29.jpg",
+    reference: "Daniel 3:23\u201325",
+    description: "Shadrach, Meshach, and Abed-nego refused to worship the golden idol and were thrown into a furnace heated seven times hotter than usual. But the king saw four men walking unharmed in the fire \u2014 and the fourth looked \u201clike the Son of God.\u201d",
+    question: "What does this story teach about Jesus Christ?",
+    answers: [
+      "God makes us immune to fire if we are faithful enough",
+      "Christ stands with us in our trials \u2014 He does not always remove the furnace, but He walks through it with us",
+      "It teaches that prayer can change the temperature of fire",
+      "The fourth figure was an angel, not a symbol of Christ"
+    ],
+    correct: 1,
+    explanation: "The Savior\u2019s presence in the furnace is a powerful reminder that He will support us in our trials. He doesn\u2019t always remove the difficulty, but He is always with us in the middle of it.",
+    scripture: "\u201cLo, I see four men loose, walking in the midst of the fire \u2026 and the form of the fourth is like the Son of God\u201d \u2014 Daniel 3:25"
+  },
+  {
+    story: "The Lord Looks on the Heart",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Felix-Joseph_Barrias_-_Anointing_of_David_by_Samuel.jpg/800px-Felix-Joseph_Barrias_-_Anointing_of_David_by_Samuel.jpg",
+    reference: "1 Samuel 16:6\u20137",
+    description: "When Samuel came to anoint a new king, he saw Jesse\u2019s eldest son Eliab and thought, \u201cSurely the Lord\u2019s anointed is before him.\u201d But the Lord told Samuel not to look on his appearance or height \u2014 \u201cthe Lord looketh on the heart.\u201d The young shepherd David was chosen instead.",
+    question: "How does this story reflect Christ\u2019s nature?",
+    answers: [
+      "It teaches that tall people shouldn\u2019t be leaders",
+      "Like the Lord who chose David, Christ sees our true worth and potential \u2014 He looks past outward appearances and into our hearts",
+      "It means David was the strongest of all the brothers",
+      "It shows that prophets sometimes make mistakes"
+    ],
+    correct: 1,
+    explanation: "Christ does not judge us the way the world does. He sees who we really are and who we can become. This gives hope to everyone who feels overlooked or not enough.",
+    scripture: "\u201cThe Lord seeth not as man seeth; for man looketh on the outward appearance, but the Lord looketh on the heart\u201d \u2014 1 Samuel 16:7"
+  },
+  {
+    story: "Though Your Sins Be as Scarlet",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/120.The_Prophet_Isaiah.jpg/800px-120.The_Prophet_Isaiah.jpg",
+    reference: "Isaiah 1:16\u201318",
+    description: "Through the prophet Isaiah, the Lord invited His people to repent and reason with Him. He gave one of the most beautiful promises in all scripture: \u201cThough your sins be as scarlet, they shall be as white as snow; though they be red like crimson, they shall be as wool.\u201d",
+    question: "What does this promise teach about Jesus Christ?",
+    answers: [
+      "Christ has the power to completely cleanse us from sin \u2014 no stain is too deep for His Atonement to remove",
+      "We should wear white clothing to symbolize purity",
+      "Isaiah was a poet who used colorful imagery but wasn\u2019t speaking literally",
+      "God will only forgive small sins, not serious ones"
+    ],
+    correct: 0,
+    explanation: "Scarlet dye was permanent in the ancient world \u2014 it could never be washed out. By using this image, the Lord teaches that even sins we think are permanent can be completely erased through the Savior\u2019s Atonement.",
+    scripture: "\u201cThough your sins be as scarlet, they shall be as white as snow\u201d \u2014 Isaiah 1:18"
+  },
+  {
+    story: "Immanuel \u2014 God with Us",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Jesaja_%28Michelangelo%29.jpg/800px-Jesaja_%28Michelangelo%29.jpg",
+    reference: "Isaiah 7:14",
+    description: "When King Ahaz faced invasion and fear, the prophet Isaiah delivered a sign from the Lord: \u201cA virgin shall conceive, and bear a son, and shall call his name Immanuel\u201d \u2014 meaning \u201cGod with us.\u201d",
+    question: "What does the name \u201cImmanuel\u201d teach about Jesus Christ?",
+    answers: [
+      "It was simply a popular name in ancient Israel",
+      "It refers to a military leader who would defeat Israel\u2019s enemies",
+      "Christ is literally God who came to dwell among us \u2014 He is always with us and will never leave us alone",
+      "It is a title for the prophet Isaiah himself"
+    ],
+    correct: 2,
+    explanation: "Immanuel means \u201cGod with us.\u201d This is one of the most profound truths of the gospel: Jesus Christ is not a distant God. He came to earth, lived among us, and promises to be with us always.",
+    scripture: "\u201cBehold, a virgin shall conceive, and bear a son, and shall call his name Immanuel\u201d \u2014 Isaiah 7:14"
+  },
+  {
+    story: "Thy Maker Is Thine Husband",
+    image: "https://upload.wikimedia.org/wikipedia/commons/1/18/Hosea_by_James_Tissot.jpg",
+    reference: "Isaiah 54:5",
+    description: "Isaiah used the tender image of marriage to describe God\u2019s relationship with His covenant people. He declared, \u201cThy Maker is thine husband; the Lord of hosts is his name; and thy Redeemer the Holy One of Israel.\u201d",
+    question: "What does the metaphor of God as a \u201chusband\u201d teach about Christ?",
+    answers: [
+      "It means everyone must be married to be saved",
+      "Christ is bound to us by covenant \u2014 He is faithful, devoted, and will never abandon His people even when they stray",
+      "It is a cultural custom that has no spiritual meaning",
+      "It only applies to the nation of Israel, not to us today"
+    ],
+    correct: 1,
+    explanation: "Marriage in scripture symbolizes the deepest covenant relationship. Christ is the faithful husband who never breaks His covenants, who pursues us when we wander, and who loves us with perfect, everlasting devotion.",
+    scripture: "\u201cThy Maker is thine husband; the Lord of hosts is his name; and thy Redeemer the Holy One of Israel\u201d \u2014 Isaiah 54:5"
   }
 ];
 
