@@ -479,7 +479,9 @@ function broadcastGameState() {
     answerMap: gameState.answerMap,
     playerCount: gameState.players.length,
     teamPlayerCounts: getTeamPlayerCounts(),
-    roomCode: gameState.roomCode
+    roomCode: gameState.roomCode,
+    scoringMode: gameState.scoringMode,
+    timerEnd: gameState.timerEnd || 0
   };
   sendToTeacher(teacherState);
 
@@ -507,6 +509,9 @@ function broadcastGameState() {
       teams: gameState.teams.map(t => ({ name: t.name, emoji: t.emoji, color: t.color, score: t.score })),
       hasAnswered,
       myAnswer: playerAnswer?.answerIndex,
+      scoringMode: gameState.scoringMode,
+      timerEnd: gameState.timerEnd || 0,
+      teamLocked: gameState.scoringMode === 'speed' && gameState.roundAnswers.some(a => a.teamIndex === player.teamIndex),
     };
 
     if (gameState.phase === 'choices' || gameState.phase === 'revealed') {
@@ -531,8 +536,13 @@ function handlePlayerMessage(playerId, msg) {
   if (!player) return;
 
   if (msg.type === 'answer' && gameState.phase === 'choices') {
-    // Check if already answered
-    if (gameState.roundAnswers.some(a => a.playerId === playerId)) return;
+    if (gameState.scoringMode === 'speed') {
+      // Speed mode: only the first answer per team counts
+      if (gameState.roundAnswers.some(a => a.teamIndex === player.teamIndex)) return;
+    } else {
+      // Team/Individual: one answer per player
+      if (gameState.roundAnswers.some(a => a.playerId === playerId)) return;
+    }
 
     gameState.roundAnswers.push({
       playerId,
@@ -594,8 +604,26 @@ function handleTeacherMessage(msg) {
       gameState.phase = 'choices';
       gameState.roundAnswers = [];
       gameState.answerMap = shuffle([0, 1, 2, 3]);
+
+      // Start 40-second timer for team/individual modes
+      if (gameState.scoringMode !== 'speed') {
+        gameState.timerEnd = Date.now() + 40000;
+        clearTimeout(gameState._timer);
+        gameState._timer = setTimeout(() => {
+          if (gameState.phase === 'choices') {
+            gameState.phase = 'revealed';
+            gameState.timerEnd = 0;
+            broadcastGameState();
+          }
+        }, 40000);
+      } else {
+        gameState.timerEnd = 0;
+      }
+
       broadcastGameState();
     } else if (gameState.phase === 'choices') {
+      clearTimeout(gameState._timer);
+      gameState.timerEnd = 0;
       gameState.phase = 'revealed';
       broadcastGameState();
     } else if (gameState.phase === 'revealed') {
@@ -1070,6 +1098,15 @@ ws.onmessage = (e) => {
   render();
 };
 
+// Countdown timer tick
+setInterval(() => {
+  const td = document.getElementById('timerDisplay');
+  if (td && state.timerEnd > 0) {
+    const secs = Math.max(0, Math.ceil((state.timerEnd - Date.now()) / 1000));
+    td.textContent = secs + 's remaining';
+  }
+}, 1000);
+
 document.addEventListener('keydown', (e) => {
   if (e.code === 'Space' || e.code === 'Enter') {
     e.preventDefault();
@@ -1176,8 +1213,17 @@ function renderGame() {
   else if (isBonus) html += '<span class="round-badge bonus">Double Points</span>';
   else html += '<span class="round-badge normal">Standard</span>';
 
-  const hints = { story: 'Press Space to show answers', choices: 'Students are answering on their phones...', revealed: 'Press Space for next round' };
-  html += '<span class="teacher-hint">' + (hints[state.phase] || '') + '</span>';
+  let hintText = '';
+  if (state.phase === 'story') hintText = 'Press Space to show answers';
+  else if (state.phase === 'choices') {
+    if (state.timerEnd > 0) {
+      const secs = Math.max(0, Math.ceil((state.timerEnd - Date.now()) / 1000));
+      hintText = '<span id="timerDisplay">' + secs + 's remaining</span> \u2014 Students answering...';
+    } else {
+      hintText = 'Students are answering... Press Space to reveal';
+    }
+  } else if (state.phase === 'revealed') hintText = 'Press Space for next round';
+  html += '<span class="teacher-hint">' + hintText + '</span>';
   html += '</div>';
 
   // Score strip
@@ -1465,6 +1511,7 @@ const PLAYER_HTML = `<!DOCTYPE html>
   }
   .play-story-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem; letter-spacing: -0.01em; }
 
+  .play-timer { font-size: 1.5rem; font-weight: 800; color: var(--accent); text-align: center; margin-bottom: 0.5rem; font-variant-numeric: tabular-nums; }
   .play-question { font-size: 1rem; font-weight: 600; margin-bottom: 0.25rem; }
 
   .play-answers { display: flex; flex-direction: column; gap: 0.6rem; }
@@ -1694,9 +1741,14 @@ function renderPlayView() {
   }
 
   if (s.phase === 'choices') {
-    if (s.hasAnswered) {
-      html += '<div class="play-answered"><div class="check">\\u2713</div>Answer locked in!<br><span style="font-size:0.85rem;">Waiting for the teacher to reveal...</span></div>';
+    if (s.hasAnswered || s.teamLocked) {
+      const msg = s.teamLocked && !s.hasAnswered ? 'A teammate already answered for your team!' : 'Answer locked in!';
+      html += '<div class="play-answered"><div class="check">\\u2713</div>' + msg + '<br><span style="font-size:0.85rem;">Waiting for the teacher to reveal...</span></div>';
     } else {
+      if (s.timerEnd > 0) {
+        const secs = Math.max(0, Math.ceil((s.timerEnd - Date.now()) / 1000));
+        html += '<div class="play-timer" id="playerTimer">' + secs + 's</div>';
+      }
       html += '<div class="play-question">' + (s.question || '') + '</div>';
       html += '<div class="play-answers">';
       (s.answers || []).forEach((a, i) => {
@@ -1747,6 +1799,15 @@ function submitAnswer(idx) {
     ws.send(JSON.stringify({ type: 'answer', answerIndex: idx }));
   }
 }
+
+// Player countdown timer
+setInterval(() => {
+  const td = document.getElementById('playerTimer');
+  if (td && myState && myState.timerEnd > 0) {
+    const secs = Math.max(0, Math.ceil((myState.timerEnd - Date.now()) / 1000));
+    td.textContent = secs + 's';
+  }
+}, 1000);
 </script>
 </body>
 </html>`;
