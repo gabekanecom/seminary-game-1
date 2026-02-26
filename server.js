@@ -1132,6 +1132,12 @@ const TEACHER_HTML = `<!DOCTYPE html>
   .round-badge.normal { background: rgba(255,255,255,0.08); color: var(--text-secondary); }
   .round-badge.bonus { background: rgba(255,69,58,0.18); color: var(--red); }
   .teacher-hint { font-size: 0.75rem; color: var(--label); }
+  .btn-reset {
+    background: none; border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary);
+    font-size: 1.1rem; width: 32px; height: 32px; border-radius: 8px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .btn-reset:hover { background: rgba(255,255,255,0.06); color: var(--text); }
 
   .scoreboard-strip {
     display: flex; justify-content: center; background: rgba(28,28,30,0.6);
@@ -1435,6 +1441,7 @@ function renderGame() {
     }
   } else if (state.phase === 'revealed') hintText = 'Press Space for next round';
   html += '<span class="teacher-hint">' + hintText + '</span>';
+  html += '<button class="btn-reset" onclick="resetGame()" title="Reset Game">\\u21BB</button>';
   html += '</div>';
 
   // Score strip
@@ -1516,6 +1523,12 @@ function advance() {
   ws.send(JSON.stringify({ type: 'advance' }));
 }
 
+function resetGame() {
+  if (confirm('Reset the game and return to the lobby?')) {
+    ws.send(JSON.stringify({ type: 'resetGame' }));
+  }
+}
+
 function renderScoreboard() {
   const el = document.getElementById('scoreboard');
   const sorted = [...(state.teams || [])].sort((a, b) => b.score - a.score);
@@ -1534,7 +1547,10 @@ function renderScoreboard() {
     html += '<div class="sb-correct">' + t.correctCount + ' correct</div></div>';
   });
   html += '</div>';
+  html += '<div style="display:flex;gap:1rem;align-items:center;justify-content:center;">';
   html += '<button class="btn btn-gold" onclick="advance()" style="font-size:1.1rem;padding:1rem 2.5rem;">Next Round <span class="key-hint">Space</span></button>';
+  html += '<button class="btn btn-outline" onclick="resetGame()" style="font-size:0.9rem;padding:0.8rem 1.5rem;">New Game</button>';
+  html += '</div>';
   el.innerHTML = html;
 }
 
@@ -1587,7 +1603,7 @@ function renderFinal() {
   });
   html += '</div>';
   html += '<p class="final-message">Every story in the Old Testament can teach us about Jesus Christ. The more you look for Him, the more you\\u2019ll find Him \\u2014 in every book, every page, every verse.</p>';
-  html += '<button class="btn btn-gold" onclick="location.reload()">Play Again</button>';
+  html += '<button class="btn btn-gold" onclick="resetGame()">New Game</button>';
   el.innerHTML = html;
 
   launchConfetti();
