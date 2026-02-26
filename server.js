@@ -700,6 +700,18 @@ function handleTeacherMessage(msg) {
       });
     }
 
+    // Reassign players whose team doesn't exist to a valid team
+    gameState.players.forEach(p => {
+      if (p.teamIndex >= teamCount) {
+        // Find the team with the fewest players
+        const counts = new Array(teamCount).fill(0);
+        gameState.players.forEach(other => {
+          if (other.teamIndex < teamCount) counts[other.teamIndex]++;
+        });
+        p.teamIndex = counts.indexOf(Math.min(...counts));
+      }
+    });
+
     gameState.scoringMode = msg.scoringMode || 'team';
     gameState.questions = shuffle(ALL_QUESTIONS).slice(0, TOTAL_ROUNDS);
     gameState.currentRound = 0;
