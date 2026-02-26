@@ -527,6 +527,7 @@ let gameState = {
   roundAnswers: [],  // { playerId, playerName, teamIndex, answerIndex, timestamp }
   answerMap: [],     // shuffled answer indices for current round
   roomCode: '',
+  lobbyTeamCount: 3,
   scoringMode: 'team',  // 'team' | 'individual' | 'speed'
   timerActive: false,
   timerEnd: 0,
@@ -625,6 +626,7 @@ function broadcastGameState() {
     const playerState = {
       type: 'gameState',
       status: gameState.status,
+      lobbyTeamCount: gameState.lobbyTeamCount,
       phase: gameState.phase,
       currentRound: gameState.currentRound,
       totalRounds: TOTAL_ROUNDS,
@@ -686,6 +688,11 @@ function handlePlayerMessage(playerId, msg) {
 }
 
 function handleTeacherMessage(msg) {
+  if (msg.type === 'setTeamCount') {
+    gameState.lobbyTeamCount = msg.teamCount || 3;
+    broadcastGameState();
+  }
+
   if (msg.type === 'startGame') {
     // Set up teams
     const teamCount = msg.teamCount || 3;
@@ -901,6 +908,9 @@ const server = http.createServer((req, res) => {
   } else if (pathname === '/play') {
     res.writeHead(200, { 'Content-Type': 'text/html' });
     res.end(PLAYER_HTML);
+  } else if (pathname === '/api/lobby') {
+    res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' });
+    res.end(JSON.stringify({ teamCount: gameState.lobbyTeamCount, status: gameState.status }));
   } else {
     res.writeHead(404);
     res.end('Not found');
@@ -1376,6 +1386,9 @@ function renderLobby() {
 
 function setTeamCount(n) {
   teamCountSetting = n;
+  if (ws && ws.readyState === 1) {
+    ws.send(JSON.stringify({ type: 'setTeamCount', teamCount: n }));
+  }
   renderLobby();
 }
 
@@ -1771,6 +1784,17 @@ let joinParams = {}; // saved for reconnect
 // On load, render join form
 renderJoin();
 
+// Poll lobby settings so team picker reflects teacher's selection
+let lobbyPoll = setInterval(() => {
+  fetch('/api/lobby').then(r => r.json()).then(data => {
+    if (data.teamCount && (!myState.lobbyTeamCount || myState.lobbyTeamCount !== data.teamCount)) {
+      myState.lobbyTeamCount = data.teamCount;
+      renderTeamPicker();
+    }
+    if (data.status !== 'lobby') clearInterval(lobbyPoll);
+  }).catch(() => {});
+}, 3000);
+
 function renderJoin() {
   const el = document.getElementById('joinScreen');
   el.innerHTML =
@@ -1814,9 +1838,17 @@ function renderTeamPicker() {
     { emoji: '\\u{1F525}', color: '#BF5AF2', name: 'Burning Bush' }
   ];
 
+  const teamCount = (myState && myState.lobbyTeamCount) || 4;
+  const visible = presets.slice(0, teamCount);
+
+  // If selected team is now out of range, reset to 0
+  if (selectedTeam >= teamCount) {
+    selectedTeam = 0;
+  }
+
   const picker = document.getElementById('teamPicker');
   if (!picker) return;
-  picker.innerHTML = presets.map((p, i) =>
+  picker.innerHTML = visible.map((p, i) =>
     '<div class="team-pick-btn' + (selectedTeam === i ? ' selected' : '') + '" onclick="pickTeam(' + i + ')" style="' + (selectedTeam === i ? 'border-color:' + p.color : '') + '">' +
     '<div class="t-emoji">' + p.emoji + '</div>' +
     '<div class="t-name" style="color:' + p.color + '">' + p.name + '</div></div>'
