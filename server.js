@@ -16,6 +16,7 @@ const PORT = process.env.PORT || 3000;
 const ALL_QUESTIONS = [
   {
     story: "Abraham and Isaac on Mount Moriah",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Sacrifice_of_Isaac-Caravaggio_%28Uffizi%29.jpg/800px-Sacrifice_of_Isaac-Caravaggio_%28Uffizi%29.jpg",
     reference: "Genesis 22:1\u201314",
     description: "God asked Abraham to offer his son Isaac as a sacrifice on Mount Moriah. Abraham obeyed, and as he raised the knife, an angel stopped him. A ram caught in a thicket was provided as a substitute sacrifice. Abraham named the place \u201cJehovah-jireh\u201d \u2014 the Lord will provide.",
     question: "How does this story point to Jesus Christ?",
@@ -31,6 +32,7 @@ const ALL_QUESTIONS = [
   },
   {
     story: "The Passover Lamb in Egypt",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/035.The_Firstborn_of_the_Egyptians_Are_Slain.jpg/800px-035.The_Firstborn_of_the_Egyptians_Are_Slain.jpg",
     reference: "Exodus 12:3\u201313",
     description: "Before the final plague in Egypt, each Israelite family was told to choose a lamb without blemish, sacrifice it, and paint its blood on their doorposts. The destroyer would then \u201cpass over\u201d those homes, sparing their firstborn from death.",
     question: "What does the Passover lamb represent?",
@@ -46,6 +48,7 @@ const ALL_QUESTIONS = [
   },
   {
     story: "Moses Lifts the Brazen Serpent",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/042.The_Bronze_Serpent.jpg/800px-042.The_Bronze_Serpent.jpg",
     reference: "Numbers 21:6\u20139",
     description: "When poisonous serpents bit the Israelites in the wilderness, Moses was commanded to make a serpent of brass and lift it high on a pole. Anyone who had been bitten could simply look upon the brass serpent and live.",
     question: "What did the serpent lifted on the pole symbolize?",
@@ -61,6 +64,7 @@ const ALL_QUESTIONS = [
   },
   {
     story: "Joseph Sold into Egypt",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Schnorr_von_Carolsfeld_Bibel_in_Bildern_1860_038.png/800px-Schnorr_von_Carolsfeld_Bibel_in_Bildern_1860_038.png",
     reference: "Genesis 37; 45:1\u20138",
     description: "Joseph\u2019s brothers were jealous of him. They sold him for twenty pieces of silver and told their father he was dead. Years later, Joseph rose to become the second most powerful man in Egypt and saved his entire family from famine \u2014 weeping as he forgave the very brothers who betrayed him.",
     question: "How is Joseph a \u201ctype\u201d of Christ?",
@@ -76,6 +80,7 @@ const ALL_QUESTIONS = [
   },
   {
     story: "Manna from Heaven",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Tissot_The_Gathering_of_the_Manna_%28color%29.jpg/800px-Tissot_The_Gathering_of_the_Manna_%28color%29.jpg",
     reference: "Exodus 16:14\u201318, 31",
     description: "When the Israelites were hungry in the wilderness, God sent bread from heaven each morning \u2014 a small, white, sweet substance they called manna. It appeared on the ground like dew and had to be gathered fresh every day.",
     question: "What did the manna foreshadow?",
@@ -91,6 +96,7 @@ const ALL_QUESTIONS = [
   },
   {
     story: "Water from the Rock at Horeb",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/041.Moses_Strikes_the_Rock_at_Horeb.jpg/800px-041.Moses_Strikes_the_Rock_at_Horeb.jpg",
     reference: "Exodus 17:1\u20136",
     description: "When the Israelites were desperate for water in the desert, the Lord told Moses to strike a rock at Horeb with his rod. When he did, water poured from the rock and the people drank freely.",
     question: "What does the rock that gave water represent?",
@@ -106,6 +112,7 @@ const ALL_QUESTIONS = [
   },
   {
     story: "The Day of Atonement",
+    image: "https://upload.wikimedia.org/wikipedia/commons/1/14/High_Priest_Offering_Sacrifice_of_a_Goat.jpg",
     reference: "Leviticus 16:7\u201310, 21\u201322",
     description: "Once a year on the holiest day, the high priest took two goats. One was sacrificed as a sin offering. The other \u2014 the \u201cscapegoat\u201d \u2014 had the sins of all the people symbolically placed upon its head. It was then sent into the wilderness, carrying their sins far away.",
     question: "How does the Day of Atonement point to Christ?",
@@ -121,6 +128,7 @@ const ALL_QUESTIONS = [
   },
   {
     story: "Jonah and the Great Fish",
+    image: "https://upload.wikimedia.org/wikipedia/commons/9/9f/Dore_jonah_whale.jpg",
     reference: "Jonah 1:17; 2:10",
     description: "The prophet Jonah fled from God\u2019s command and was swallowed by a great fish. He spent three days and three nights in complete darkness inside its belly. On the third day, he was brought forth alive.",
     question: "What did Jonah\u2019s three days in the fish foreshadow?",
@@ -136,6 +144,7 @@ const ALL_QUESTIONS = [
   },
   {
     story: "The Suffering Servant",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/120.The_Prophet_Isaiah.jpg/800px-120.The_Prophet_Isaiah.jpg",
     reference: "Isaiah 53:3\u20137",
     description: "Seven hundred years before Christ\u2019s birth, Isaiah described a future figure who would be \u201cdespised and rejected,\u201d a \u201cman of sorrows\u201d acquainted with grief. He would be \u201cwounded for our transgressions\u201d and led \u201cas a lamb to the slaughter.\u201d",
     question: "Who is the Suffering Servant Isaiah described?",
@@ -151,6 +160,7 @@ const ALL_QUESTIONS = [
   },
   {
     story: "Adam and the Fall",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/003.Adam_and_Eve_Are_Driven_out_of_Eden.jpg/800px-003.Adam_and_Eve_Are_Driven_out_of_Eden.jpg",
     reference: "Genesis 3:17\u201319; Moses 6:48",
     description: "When Adam and Eve partook of the fruit, the Fall brought both physical and spiritual death into the world. But even in that moment, God promised that a future Savior would come to overcome what the Fall had set in motion.",
     question: "How does Adam\u2019s story connect to Jesus Christ?",
@@ -166,6 +176,7 @@ const ALL_QUESTIONS = [
   },
   {
     story: "Ruth and Boaz \u2014 The Kinsman Redeemer",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/069.Ruth_and_Boaz.jpg/800px-069.Ruth_and_Boaz.jpg",
     reference: "Ruth 3\u20134",
     description: "Ruth, a Moabite widow, was destitute and far from home. Boaz, a wealthy and honorable relative, chose to act as her \u201ckinsman redeemer\u201d \u2014 he had the right, the resources, and the willingness to redeem her and restore everything lost.",
     question: "How does Boaz represent Jesus Christ?",
@@ -181,6 +192,7 @@ const ALL_QUESTIONS = [
   },
   {
     story: "Melchizedek, King of Salem",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Pierre_Paul_Rubens_-_Abraham_et_Melchis%C3%A9dech.jpg/800px-Pierre_Paul_Rubens_-_Abraham_et_Melchis%C3%A9dech.jpg",
     reference: "Genesis 14:18\u201320",
     description: "After Abraham rescued Lot, he was met by Melchizedek \u2014 the king of Salem and also a priest of the most high God. Melchizedek brought out bread and wine and blessed Abraham.",
     question: "Why is Melchizedek considered a type of Christ?",
@@ -196,6 +208,7 @@ const ALL_QUESTIONS = [
   },
   {
     story: "The Ark of the Covenant",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/James_Jacques_Joseph_Tissot_-_The_Ark_Passes_Over_the_Jordan_-_Google_Art_Project.jpg/800px-James_Jacques_Joseph_Tissot_-_The_Ark_Passes_Over_the_Jordan_-_Google_Art_Project.jpg",
     reference: "Exodus 25:10\u201322",
     description: "God commanded Moses to build a sacred chest overlaid with gold. Inside were the tablets of the law, a pot of manna, and Aaron\u2019s rod that budded. Above it sat the mercy seat, where God\u2019s presence dwelt.",
     question: "How does the Ark of the Covenant symbolize Jesus Christ?",
@@ -211,6 +224,7 @@ const ALL_QUESTIONS = [
   },
   {
     story: "Jacob\u2019s Ladder",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/El_sue%C3%B1o_de_Jacob%2C_por_Jos%C3%A9_de_Ribera.jpg/800px-El_sue%C3%B1o_de_Jacob%2C_por_Jos%C3%A9_de_Ribera.jpg",
     reference: "Genesis 28:12\u201317",
     description: "While fleeing from Esau, Jacob dreamed of a great ladder reaching from earth to heaven. Angels ascended and descended on it, and the Lord stood at the top, renewing His covenant promises.",
     question: "How does Jacob\u2019s ladder point to Jesus Christ?",
@@ -226,6 +240,7 @@ const ALL_QUESTIONS = [
   },
   {
     story: "Moses Parts the Red Sea",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/037.The_Egyptians_Drown_in_the_Sea.jpg/800px-037.The_Egyptians_Drown_in_the_Sea.jpg",
     reference: "Exodus 14:13\u201322",
     description: "With Pharaoh\u2019s army behind them and the sea blocking their path, the Israelites were trapped. Moses stretched out his hand, and God parted the Red Sea, creating a dry path through the waters.",
     question: "How does the parting of the Red Sea symbolize what Christ does for us?",
@@ -241,6 +256,7 @@ const ALL_QUESTIONS = [
   },
   {
     story: "The Tabernacle and Its Veil",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Tissot_Moses_and_Joshua_in_the_Tabernacle.jpg/800px-Tissot_Moses_and_Joshua_in_the_Tabernacle.jpg",
     reference: "Exodus 26:31\u201333",
     description: "Inside the tabernacle, a thick veil separated the Holy Place from the Holy of Holies \u2014 the inner room where God\u2019s presence dwelt. No one could pass except the high priest, once a year, with the blood of a sacrifice.",
     question: "What did the veil of the tabernacle represent?",
@@ -256,6 +272,7 @@ const ALL_QUESTIONS = [
   },
   {
     story: "Daniel in the Lions\u2019 Den",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/131.Daniel_in_the_Lions%27_Den.jpg/800px-131.Daniel_in_the_Lions%27_Den.jpg",
     reference: "Daniel 6:16\u201323",
     description: "Daniel was thrown into a den of hungry lions because he refused to stop praying to God. A stone was placed over the mouth of the den and sealed. The next morning, Daniel was found alive and unharmed.",
     question: "How does Daniel\u2019s experience parallel the story of Jesus Christ?",
@@ -271,6 +288,7 @@ const ALL_QUESTIONS = [
   },
   {
     story: "Noah\u2019s Ark and the Flood",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/007.The_Great_Flood.jpg/800px-007.The_Great_Flood.jpg",
     reference: "Genesis 6:14\u201318; 7:1",
     description: "When the earth was filled with wickedness, God told Noah to build an ark \u2014 the only means of salvation from the coming flood. Noah\u2019s family entered the ark, and God Himself shut the door. Only those inside were saved.",
     question: "How does the ark represent Jesus Christ?",
@@ -286,6 +304,7 @@ const ALL_QUESTIONS = [
   },
   {
     story: "The Bronze Altar of Burnt Offering",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Holman_The_Burning_of_the_Offerings.jpg/800px-Holman_The_Burning_of_the_Offerings.jpg",
     reference: "Exodus 27:1\u20138; Leviticus 1:3\u20139",
     description: "At the tabernacle entrance stood a great bronze altar where animals were sacrificed. The animal had to be \u201cwithout blemish.\u201d The person bringing it would lay their hands on the animal\u2019s head \u2014 symbolically transferring their sins \u2014 before it was sacrificed in their place.",
     question: "What did the burnt offering on the altar foreshadow?",
@@ -301,6 +320,7 @@ const ALL_QUESTIONS = [
   },
   {
     story: "Joshua Leads Israel into the Promised Land",
+    image: "https://upload.wikimedia.org/wikipedia/commons/b/be/Dore_joshua_crossing.jpg",
     reference: "Joshua 1:1\u20139; 3:14\u201317",
     description: "After Moses died, Joshua led Israel across the Jordan River into the promised land. As the priests carrying the ark stepped into the flooded Jordan, the waters parted and all Israel crossed on dry ground.",
     question: "How is Joshua a type of Jesus Christ?",
@@ -316,6 +336,7 @@ const ALL_QUESTIONS = [
   },
   {
     story: "Elijah\u2019s Sacrifice on Mount Carmel",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/090.The_Prophets_of_Baal_Are_Slaughtered.jpg/800px-090.The_Prophets_of_Baal_Are_Slaughtered.jpg",
     reference: "1 Kings 18:30\u201339",
     description: "On Mount Carmel, Elijah challenged the prophets of Baal. Each side would prepare a sacrifice, and the God who answered by fire would be proven true. The prophets of Baal cried out all day with no answer. Then Elijah soaked his altar with water, prayed once, and fire fell from heaven, consuming everything.",
     question: "How does this event point to Christ?",
@@ -331,6 +352,7 @@ const ALL_QUESTIONS = [
   },
   {
     story: "David and Goliath",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/071A.David_Slays_Goliath.jpg/800px-071A.David_Slays_Goliath.jpg",
     reference: "1 Samuel 17:4\u201350",
     description: "The giant Goliath \u2014 heavily armed and seemingly invincible \u2014 terrorized all of Israel. Then David, a young shepherd with no armor, stepped forward with just a stone and a sling, struck Goliath down, and won the victory for all Israel.",
     question: "How does David\u2019s victory over Goliath foreshadow Christ?",
@@ -346,6 +368,7 @@ const ALL_QUESTIONS = [
   },
   {
     story: "The Prophet Hosea and His Unfaithful Wife",
+    image: "https://upload.wikimedia.org/wikipedia/commons/a/a1/Hosea_and_Gomer.jpg",
     reference: "Hosea 1\u20133",
     description: "God told Hosea to marry Gomer, a woman who would be unfaithful. Despite her repeated unfaithfulness, God commanded Hosea to buy her back from slavery and love her again. His unconditional love was a living parable of God\u2019s love for Israel.",
     question: "How does Hosea\u2019s story illustrate Christ\u2019s love for us?",
@@ -915,7 +938,10 @@ const TEACHER_HTML = `<!DOCTYPE html>
   .story-card {
     background: rgba(28,28,30,0.7); backdrop-filter: blur(40px);
     border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 2rem 2.5rem;
+    display: flex; gap: 2rem; align-items: flex-start;
   }
+  .story-img { width: 220px; min-width: 220px; border-radius: 12px; object-fit: cover; max-height: 260px; }
+  .story-body { flex: 1; }
   .story-header { display: flex; align-items: baseline; gap: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap; }
   .story-title { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.02em; }
   .story-ref { font-size: 0.95rem; color: var(--text-secondary); }
@@ -1186,10 +1212,12 @@ function renderGame() {
   html += '<div class="game-content"><div class="game-scroll">';
 
   // Story card
-  html += '<div class="story-card"><div class="story-header">';
+  html += '<div class="story-card">';
+  if (q.image) html += '<img class="story-img" src="' + q.image + '" alt="' + q.story + '">';
+  html += '<div class="story-body"><div class="story-header">';
   html += '<span class="story-title">' + q.story + '</span>';
   html += '<span class="story-ref">' + q.reference + '</span></div>';
-  html += '<div class="story-text">' + q.description + '</div></div>';
+  html += '<div class="story-text">' + q.description + '</div></div></div>';
 
   // Choices
   if (state.phase !== 'story') {
