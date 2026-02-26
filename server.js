@@ -22,9 +22,9 @@ const ALL_QUESTIONS = [
     question: "How does this story point to Jesus Christ?",
     answers: [
       "A loving Father was willing to sacrifice His Only Begotten Son \u2014 and a substitute was provided",
-      "God wants us to obey even when it\u2019s hard",
-      "Animals were used in ancient worship ceremonies",
-      "Mountains are sacred places of revelation"
+      "Abraham\u2019s obedience was tested so we could learn to follow God even when the path is painful",
+      "The ram in the thicket taught Israel that animal sacrifice was central to proper worship",
+      "Mount Moriah was chosen because high places were where God revealed His will to prophets"
     ],
     correct: 0,
     explanation: "Just as Abraham was willing to sacrifice Isaac, Heavenly Father offered His Only Begotten Son. Isaac carried the wood for his own sacrifice, as Jesus carried His cross. A substitute (the ram) was provided \u2014 pointing to Christ as the ultimate substitute for all of us.",
@@ -37,10 +37,10 @@ const ALL_QUESTIONS = [
     description: "Before the final plague in Egypt, each Israelite family was told to choose a lamb without blemish, sacrifice it, and paint its blood on their doorposts. The destroyer would then \u201cpass over\u201d those homes, sparing their firstborn from death.",
     question: "What does the Passover lamb represent?",
     answers: [
-      "The importance of following Moses as a prophet",
+      "Israel\u2019s obedient faith in following Moses\u2019s instructions as a covenant people",
       "Jesus Christ, the Lamb of God, whose blood saves us from spiritual death",
-      "The need to prepare food before a long journey",
-      "God\u2019s power over the Egyptian gods"
+      "The need to prepare nourishment and provisions before the long exodus journey",
+      "God\u2019s supreme authority was demonstrated by overpowering each Egyptian god"
     ],
     correct: 1,
     explanation: "The Passover lamb had to be \u201cwithout blemish\u201d \u2014 just as Christ was sinless. Its blood on the doorpost saved families from death, just as Christ\u2019s atoning blood saves us from spiritual death.",
@@ -53,10 +53,10 @@ const ALL_QUESTIONS = [
     description: "When poisonous serpents bit the Israelites in the wilderness, Moses was commanded to make a serpent of brass and lift it high on a pole. Anyone who had been bitten could simply look upon the brass serpent and live.",
     question: "What did the serpent lifted on the pole symbolize?",
     answers: [
-      "The healing power of bronze metal in ancient times",
-      "Moses\u2019s role as a skilled craftsman",
+      "The bronze material had healing properties that ancient Israel understood",
+      "Moses served as a mediator by crafting a remedy for God\u2019s suffering people",
       "Christ being \u201clifted up\u201d on the cross \u2014 all who look to Him will be saved",
-      "The danger of complaining against God"
+      "The serpents taught Israel that complaining against God brings consequences"
     ],
     correct: 2,
     explanation: "Jesus Himself explained this connection directly. Just as the Israelites had to look up at the brazen serpent to be physically healed, we must look to Christ \u2014 lifted upon the cross \u2014 to be spiritually healed and saved.",
@@ -69,10 +69,10 @@ const ALL_QUESTIONS = [
     description: "Joseph\u2019s brothers were jealous of him. They sold him for twenty pieces of silver and told their father he was dead. Years later, Joseph rose to become the second most powerful man in Egypt and saved his entire family from famine \u2014 weeping as he forgave the very brothers who betrayed him.",
     question: "How is Joseph a \u201ctype\u201d of Christ?",
     answers: [
-      "He wore colorful clothing like ancient priests",
-      "He had prophetic dreams about the stars and moon",
+      "He received a coat of many colors from his father, showing that God singles out the righteous for special blessings and favor",
+      "He had prophetic dreams about the sun, moon, and stars, showing he was given the gift of prophecy like many ancient seers",
       "He was betrayed and sold for silver, yet rose to power, saved his people, and freely forgave those who wronged him",
-      "He lived in a foreign country for many years"
+      "He lived faithfully in a foreign land among unbelievers, showing that the righteous can thrive anywhere God places them"
     ],
     correct: 2,
     explanation: "Like Christ, Joseph was betrayed by those closest to him and sold for silver. He suffered unjustly, was raised to a position of great power, then became the deliverer and savior of his people.",
@@ -86,9 +86,9 @@ const ALL_QUESTIONS = [
     question: "What did the manna foreshadow?",
     answers: [
       "Jesus Christ, the true \u201cBread of Life\u201d sent from heaven to sustain us spiritually",
-      "The importance of eating breakfast each morning",
-      "God\u2019s ability to create new kinds of food",
-      "The need to store provisions for long journeys"
+      "God\u2019s daily care for Israel in the wilderness, teaching them patience and reliance on Him",
+      "The miraculous creative power of God, who can bring forth nourishment out of nothing",
+      "Israel\u2019s need to gather and prepare provisions each day during their long wilderness journey"
     ],
     correct: 0,
     explanation: "Jesus taught that He is the true bread from heaven. Just as manna was given freely each day to sustain physical life, Christ offers Himself freely to sustain our spiritual lives.",
@@ -101,10 +101,10 @@ const ALL_QUESTIONS = [
     description: "When the Israelites were desperate for water in the desert, the Lord told Moses to strike a rock at Horeb with his rod. When he did, water poured from the rock and the people drank freely.",
     question: "What does the rock that gave water represent?",
     answers: [
-      "The importance of geology in finding water sources",
-      "Moses\u2019s authority as a prophet",
+      "God\u2019s ability to provide for physical needs in unexpected ways in the desert",
+      "Moses\u2019s prophetic authority, through which he could command the elements",
       "Jesus Christ \u2014 the source of \u201cliving water\u201d that quenches spiritual thirst",
-      "The strength and endurance of the Israelites"
+      "Israel\u2019s faithfulness in trusting God despite their difficult desert journey"
     ],
     correct: 2,
     explanation: "The apostle Paul taught directly that \u201cthat Rock was Christ.\u201d The water that saved the Israelites from physical death points to the living water Christ offers us \u2014 salvation from spiritual death.",
@@ -117,10 +117,10 @@ const ALL_QUESTIONS = [
     description: "Once a year on the holiest day, the high priest took two goats. One was sacrificed as a sin offering. The other \u2014 the \u201cscapegoat\u201d \u2014 had the sins of all the people symbolically placed upon its head. It was then sent into the wilderness, carrying their sins far away.",
     question: "How does the Day of Atonement point to Christ?",
     answers: [
-      "It teaches the importance of annual religious holidays",
+      "It teaches Israel to set aside a sacred day each year for communal repentance and spiritual renewal",
       "Christ took upon Himself the sins of the world and carried them away \u2014 He is both sacrifice and scapegoat",
-      "It shows that animals were important to Israelite culture",
-      "It represents the need for a priesthood leader in every community"
+      "It shows that ritual sacrifice was a central part of Israelite worship and covenant faithfulness",
+      "It represents the high priest\u2019s unique role as the only mediator between God and His covenant people"
     ],
     correct: 1,
     explanation: "The entire Day of Atonement ceremony was a powerful symbol of what Jesus would do. He is both the sacrificial offering and the one who carries our sins away.",
@@ -133,10 +133,10 @@ const ALL_QUESTIONS = [
     description: "The prophet Jonah fled from God\u2019s command and was swallowed by a great fish. He spent three days and three nights in complete darkness inside its belly. On the third day, he was brought forth alive.",
     question: "What did Jonah\u2019s three days in the fish foreshadow?",
     answers: [
-      "The importance of ocean travel in the ancient world",
-      "That God can use sea creatures to accomplish His purposes",
+      "God\u2019s power over all of creation, including the creatures of the sea",
+      "That God can use even fearsome beasts to redirect a wayward prophet",
       "Christ\u2019s three days in the tomb before His glorious resurrection",
-      "The danger of disobeying God\u2019s commands"
+      "The serious consequences that come when we try to flee from God\u2019s call"
     ],
     correct: 2,
     explanation: "Jesus specifically pointed to Jonah as a sign of His own death and resurrection. Just as Jonah spent three days in darkness and was then brought forth alive, Christ spent three days in the tomb and rose again.",
@@ -149,9 +149,9 @@ const ALL_QUESTIONS = [
     description: "Seven hundred years before Christ\u2019s birth, Isaiah described a future figure who would be \u201cdespised and rejected,\u201d a \u201cman of sorrows\u201d acquainted with grief. He would be \u201cwounded for our transgressions\u201d and led \u201cas a lamb to the slaughter.\u201d",
     question: "Who is the Suffering Servant Isaiah described?",
     answers: [
-      "The nation of Israel as a whole",
-      "Isaiah himself, suffering for his people",
-      "A future king of Babylon",
+      "The nation of Israel as a whole, suffering collectively among the nations",
+      "Isaiah himself, who endured grief while prophesying to a rebellious people",
+      "A righteous king of Babylon who would arise to free the Israelites from exile",
       "Jesus Christ \u2014 this is a direct messianic prophecy of His atoning sacrifice"
     ],
     correct: 3,
@@ -165,10 +165,10 @@ const ALL_QUESTIONS = [
     description: "When Adam and Eve partook of the fruit, the Fall brought both physical and spiritual death into the world. But even in that moment, God promised that a future Savior would come to overcome what the Fall had set in motion.",
     question: "How does Adam\u2019s story connect to Jesus Christ?",
     answers: [
-      "It teaches us the importance of gardening and agriculture",
+      "Adam\u2019s experience in the Garden of Eden teaches us about the beauty and sacredness of God\u2019s creations",
       "Christ is the \u201csecond Adam\u201d who overcame the Fall \u2014 redeeming us from both physical and spiritual death",
-      "It shows that obedience to God\u2019s commandments is always rewarded immediately",
-      "Adam\u2019s story is about the creation of the earth, not about Christ"
+      "The Fall shows that choosing obedience to God\u2019s commandments always brings us immediate blessings",
+      "Adam\u2019s story is primarily about the beginning of mortal life on earth and human agency in the garden"
     ],
     correct: 1,
     explanation: "Adam brought the Fall, which made mortality and death a reality for all of us. Christ, called the \u201clast Adam\u201d by Paul, overcame both physical and spiritual death through His atonement and resurrection.",
@@ -181,10 +181,10 @@ const ALL_QUESTIONS = [
     description: "Ruth, a Moabite widow, was destitute and far from home. Boaz, a wealthy and honorable relative, chose to act as her \u201ckinsman redeemer\u201d \u2014 he had the right, the resources, and the willingness to redeem her and restore everything lost.",
     question: "How does Boaz represent Jesus Christ?",
     answers: [
-      "He was wealthy, showing that God blesses the righteous with riches",
-      "He married a foreigner, showing God accepts all nations",
+      "He was a prosperous man of standing in Bethlehem, showing that the Lord rewards faithfulness with earthly blessings and abundance",
+      "He welcomed Ruth the Moabite foreigner into the covenant, showing that God\u2019s grace extends beyond Israel to all nations",
       "Like Christ our Redeemer, he had the family right, the power, and the loving willingness to save someone who could not save herself",
-      "He was a farmer, symbolizing the harvest of souls"
+      "He was lord of the harvest, gathering workers into his fields, which symbolizes how God gathers souls into His kingdom"
     ],
     correct: 2,
     explanation: "Boaz is one of the most beautiful \u201ctypes\u201d of Christ. As a kinsman redeemer, he had the family connection (right), the wealth (power), and the compassionate willingness (love) to redeem Ruth.",
@@ -198,9 +198,9 @@ const ALL_QUESTIONS = [
     question: "Why is Melchizedek considered a type of Christ?",
     answers: [
       "He was both a king and a priest \u2014 foreshadowing Christ\u2019s role as King of Kings and our Great High Priest",
-      "He lived in the city of Salem, which later became a holy city",
-      "He collected tithes, showing the importance of paying tithing",
-      "He served bread and wine as part of ancient hospitality customs"
+      "He ruled over Salem, which would later become Jerusalem \u2014 the sacred city where God\u2019s temple would stand",
+      "He received tithes from Abraham, establishing the principle that God\u2019s people should give offerings to Him",
+      "He brought out bread and wine to nourish Abraham, reflecting the ancient custom of honoring a victorious ally"
     ],
     correct: 0,
     explanation: "Melchizedek uniquely combined the roles of both king and priest \u2014 just as Christ is both the King of Kings and our Great High Priest. The bread and wine foreshadow the sacrament.",
@@ -213,10 +213,10 @@ const ALL_QUESTIONS = [
     description: "God commanded Moses to build a sacred chest overlaid with gold. Inside were the tablets of the law, a pot of manna, and Aaron\u2019s rod that budded. Above it sat the mercy seat, where God\u2019s presence dwelt.",
     question: "How does the Ark of the Covenant symbolize Jesus Christ?",
     answers: [
-      "It was made of gold, representing the wealth of Israel",
-      "It was carried by the Levites, showing the importance of priesthood duties",
+      "It was overlaid with pure gold, teaching Israel that the most precious materials should be set apart for the worship of God",
+      "It was carried only by the Levites, showing that access to God\u2019s holiest things requires proper priesthood authority and worthiness",
       "Like Christ, it held God\u2019s law within it, provided life-giving bread, and was the place where God\u2019s presence and mercy met mankind",
-      "It was kept hidden from the people, symbolizing mysteries"
+      "It was kept behind the veil in the Holy of Holies, reminding Israel that God\u2019s deepest truths are revealed only to the faithful"
     ],
     correct: 2,
     explanation: "The Ark contained the law (Christ fulfilled the law), manna (He is the Bread of Life), and Aaron\u2019s rod that budded (He is the resurrection and the life). The mercy seat is where God\u2019s presence met His people.",
@@ -229,10 +229,10 @@ const ALL_QUESTIONS = [
     description: "While fleeing from Esau, Jacob dreamed of a great ladder reaching from earth to heaven. Angels ascended and descended on it, and the Lord stood at the top, renewing His covenant promises.",
     question: "How does Jacob\u2019s ladder point to Jesus Christ?",
     answers: [
-      "It shows that angels are messengers of God",
+      "Angels serve as God\u2019s messengers, carrying His words between heaven and earth to guide His covenant people",
       "Christ is the connection between heaven and earth \u2014 the only way by which we can ascend to God",
-      "It represents the importance of making covenants in holy places",
-      "It symbolizes the difficulty of the path to heaven"
+      "Jacob\u2019s dream teaches that covenant promises are renewed in holy, set-apart places where God\u2019s Spirit dwells",
+      "The ladder represents the step-by-step spiritual progression required to eventually return to God\u2019s presence"
     ],
     correct: 1,
     explanation: "Jesus identified Himself as the fulfillment of Jacob\u2019s ladder. He is the bridge between heaven and earth, the way by which God descends to us and we ascend to Him.",
@@ -245,10 +245,10 @@ const ALL_QUESTIONS = [
     description: "With Pharaoh\u2019s army behind them and the sea blocking their path, the Israelites were trapped. Moses stretched out his hand, and God parted the Red Sea, creating a dry path through the waters.",
     question: "How does the parting of the Red Sea symbolize what Christ does for us?",
     answers: [
-      "It demonstrates God\u2019s power over nature",
+      "It demonstrates God\u2019s supreme power and authority over all the forces and elements of the natural world",
       "Christ delivers us from the bondage of sin and death \u2014 making a way through when there seems to be no way",
-      "It shows the importance of following a prophet\u2019s instructions",
-      "It symbolizes the power of prayer in times of crisis"
+      "It teaches Israel to follow their prophet\u2019s instructions with exactness, even when the situation seems hopeless",
+      "It reveals that sincere, faith-filled prayer can unlock God\u2019s miraculous intervention in desperate moments"
     ],
     correct: 1,
     explanation: "The Israelites were trapped between slavery and death with no human escape. But God made a way through the impossible. This is what Christ does for each of us.",
@@ -262,9 +262,9 @@ const ALL_QUESTIONS = [
     question: "What did the veil of the tabernacle represent?",
     answers: [
       "The separation between God and mankind \u2014 which Christ\u2019s sacrifice tore open, giving all of us access to the Father",
-      "The beauty of Israelite craftsmanship and artistry",
-      "The importance of privacy in worship",
-      "A reminder that some knowledge should remain hidden"
+      "The sacredness of God\u2019s dwelling place, which required the finest materials and most skilled artisans to create",
+      "The principle that certain aspects of worship must be kept private and performed only by authorized servants",
+      "A reminder that the deeper mysteries of God are reserved for those who have proven themselves worthy and faithful"
     ],
     correct: 0,
     explanation: "When Jesus died on the cross, the veil of the temple was miraculously torn from top to bottom \u2014 signifying that through His sacrifice, the way to God\u2019s presence is now open to everyone.",
@@ -278,9 +278,9 @@ const ALL_QUESTIONS = [
     question: "How does Daniel\u2019s experience parallel the story of Jesus Christ?",
     answers: [
       "Both were condemned by jealous enemies, sealed in a stone-covered place, and came forth alive \u2014 conquering death",
-      "It teaches that prayer is more powerful than any danger",
-      "Lions represent Satan, and God protects us from evil",
-      "It shows the importance of obeying God\u2019s laws above man\u2019s laws"
+      "It teaches that consistent, faithful prayer gives us power to overcome any threat or danger we may face in life",
+      "The lions represent the destructive forces of Satan, and God\u2019s angel intervened to protect His faithful servant",
+      "Daniel chose God\u2019s higher law over the king\u2019s decree, teaching us that obedience to God must always come first"
     ],
     correct: 0,
     explanation: "Like Christ, Daniel was condemned by jealous conspirators despite his innocence. He was placed in a pit sealed with a stone. He was expected to be dead \u2014 but was found alive. Daniel\u2019s deliverance foreshadows Christ\u2019s victory over the sealed tomb.",
@@ -293,10 +293,10 @@ const ALL_QUESTIONS = [
     description: "When the earth was filled with wickedness, God told Noah to build an ark \u2014 the only means of salvation from the coming flood. Noah\u2019s family entered the ark, and God Himself shut the door. Only those inside were saved.",
     question: "How does the ark represent Jesus Christ?",
     answers: [
-      "It shows that God rewards those who do hard physical labor",
+      "Noah\u2019s years of faithful labor in building the ark show that God blesses those who are willing to work hard and endure in obedience",
       "Christ is the only means of salvation \u2014 just as the ark was the only refuge from destruction, He is our only refuge from sin and death",
-      "It demonstrates the importance of caring for animals",
-      "It symbolizes the importance of family unity"
+      "God commanded Noah to preserve every kind of creature, teaching us that all living things are precious in God\u2019s sight and plan",
+      "The ark sheltered Noah\u2019s entire family together, symbolizing that God intends families to stay united through trials and adversity"
     ],
     correct: 1,
     explanation: "The ark was the sole means of salvation. In the same way, Jesus Christ is the only way to be saved from spiritual destruction. Peter himself compared baptism to the waters of Noah.",
@@ -309,10 +309,10 @@ const ALL_QUESTIONS = [
     description: "At the tabernacle entrance stood a great bronze altar where animals were sacrificed. The animal had to be \u201cwithout blemish.\u201d The person bringing it would lay their hands on the animal\u2019s head \u2014 symbolically transferring their sins \u2014 before it was sacrificed in their place.",
     question: "What did the burnt offering on the altar foreshadow?",
     answers: [
-      "The importance of tithing and financial sacrifice",
+      "The principle that true devotion to God requires us to give up something valuable and personally costly",
       "Christ\u2019s perfect, sinless sacrifice on the cross \u2014 He took our sins upon Himself and died in our place",
-      "That worship requires physical effort and dedication",
-      "The agricultural economy of ancient Israel"
+      "That genuine worship demands real effort, dedication, and a willingness to bring our very best offering to God",
+      "The role of livestock and herds in Israel\u2019s covenant life, as they were the most valuable possession a family owned"
     ],
     correct: 1,
     explanation: "Every element pointed to Christ. The animal had to be without blemish \u2014 Christ was sinless. The offerer laid hands on its head \u2014 our sins were laid upon Christ. The animal died in the person\u2019s place \u2014 Christ died as our substitute.",
@@ -325,10 +325,10 @@ const ALL_QUESTIONS = [
     description: "After Moses died, Joshua led Israel across the Jordan River into the promised land. As the priests carrying the ark stepped into the flooded Jordan, the waters parted and all Israel crossed on dry ground.",
     question: "How is Joshua a type of Jesus Christ?",
     answers: [
-      "He was a great military commander, symbolizing God\u2019s power in battle",
+      "He was a courageous military leader who conquered Canaan, showing that God\u2019s people must fight valiantly for their promised blessings",
       "His name is the Hebrew form of \u201cJesus\u201d \u2014 and like Christ, he led God\u2019s people through the waters of death into the promised inheritance",
-      "He replaced Moses, showing that the old must give way to the new",
-      "He divided the land among the tribes, symbolizing fairness"
+      "He succeeded Moses as leader of Israel, symbolizing that the law of Moses would give way to a new and higher covenant from God",
+      "He carefully divided the promised land among each of the tribes, showing that God provides a fair inheritance for all His children"
     ],
     correct: 1,
     explanation: "Joshua\u2019s very name \u2014 Yehoshua \u2014 is the Hebrew form of \u201cJesus,\u201d meaning \u201cthe Lord saves.\u201d Just as Joshua led Israel through the Jordan into the promised land, Jesus leads us through death into eternal life.",
@@ -342,9 +342,9 @@ const ALL_QUESTIONS = [
     question: "How does this event point to Christ?",
     answers: [
       "Elijah\u2019s sacrifice, drenched and impossible to ignite by human effort, was accepted by God\u2019s power alone \u2014 like Christ\u2019s atonement, which accomplishes what no human effort ever could",
-      "It proves that prayer can solve all problems",
-      "Fire represents the Holy Ghost, which will come to all who ask",
-      "It shows that true prophets are always vindicated in dramatic fashion"
+      "Elijah\u2019s single faithful prayer prevailed over hundreds of false prophets who cried out all day long, teaching us that sincere and humble prayer is always heard and answered by God",
+      "The fire that fell from heaven represents the Holy Ghost, which descends upon the faithful and fills them with power when they worship God in spirit and in truth",
+      "God publicly vindicated His prophet Elijah before all of Israel on Mount Carmel, showing that He will always rise up to defend and honor His true servants in due time"
     ],
     correct: 0,
     explanation: "Elijah made the sacrifice impossible by human standards \u2014 yet God\u2019s fire consumed everything. This points to the truth of Christ\u2019s atonement: salvation is accomplished by God\u2019s power, not human effort.",
@@ -357,10 +357,10 @@ const ALL_QUESTIONS = [
     description: "The giant Goliath \u2014 heavily armed and seemingly invincible \u2014 terrorized all of Israel. Then David, a young shepherd with no armor, stepped forward with just a stone and a sling, struck Goliath down, and won the victory for all Israel.",
     question: "How does David\u2019s victory over Goliath foreshadow Christ?",
     answers: [
-      "It teaches that courage is the most important virtue",
-      "David represents how physical strength doesn\u2019t matter in spiritual battles",
+      "David\u2019s courage in the face of impossible odds teaches that bravery and faith in God can overcome any obstacle we encounter in life",
+      "David\u2019s victory without armor or sword shows that spiritual strength and trust in God matter far more than physical power in battle",
       "Like Christ, David was an unlikely champion who fought an enemy no one else could defeat \u2014 winning the victory not for himself, but for all his people",
-      "It shows that God favors shepherds over soldiers"
+      "God chose a humble shepherd boy instead of a trained warrior, showing that He works through the meek and lowly rather than the mighty"
     ],
     correct: 2,
     explanation: "David was not fighting for personal glory. As a humble shepherd facing an invincible foe, David prefigures Christ, who as the Good Shepherd faced sin, death, and Satan \u2014 enemies none of us could defeat \u2014 and won the victory for all of us.",
@@ -373,10 +373,10 @@ const ALL_QUESTIONS = [
     description: "God told Hosea to marry Gomer, a woman who would be unfaithful. Despite her repeated unfaithfulness, God commanded Hosea to buy her back from slavery and love her again. His unconditional love was a living parable of God\u2019s love for Israel.",
     question: "How does Hosea\u2019s story illustrate Christ\u2019s love for us?",
     answers: [
-      "It teaches the importance of marriage covenants",
-      "It shows that prophets must be willing to suffer",
+      "Hosea\u2019s marriage teaches that covenant relationships are sacred and binding, and they must be honored even when they are difficult",
+      "Hosea\u2019s willingness to suffer and endure heartbreak shows that true prophets must sacrifice personally to fulfill God\u2019s purposes",
       "Like Christ, Hosea redeemed his beloved at great personal cost \u2014 buying back one who had gone astray, offering love that was never earned or deserved",
-      "It warns against the consequences of unfaithfulness"
+      "Gomer\u2019s unfaithfulness and its painful consequences serve as a warning that turning away from God always leads to bondage and sorrow"
     ],
     correct: 2,
     explanation: "We are like Gomer \u2014 unfaithful, wandering, even enslaved by our sins. And yet Christ, like Hosea, pursues us, pays the price to redeem us, and loves us with an everlasting love we did nothing to deserve.",
@@ -389,10 +389,10 @@ const ALL_QUESTIONS = [
     description: "Through the prophet Jeremiah, the Lord declared that His people had committed two evils: they had forsaken Him \u2014 the \u201cfountain of living waters\u201d \u2014 and had hewn out broken cisterns that could hold no water.",
     question: "What does the \u201cfountain of living waters\u201d represent?",
     answers: [
-      "The importance of clean water in ancient Israel",
+      "The need for Israel to find reliable sources of fresh water in their arid, desert homeland",
       "Jesus Christ, the source of eternal life who alone can quench our spiritual thirst",
-      "The temple in Jerusalem where people gathered to worship",
-      "The Jordan River where prophets were baptized"
+      "The temple in Jerusalem, which was the sacred gathering place where Israel worshipped God",
+      "The Jordan River, where prophets like Elijah and Elisha performed mighty miracles for Israel"
     ],
     correct: 1,
     explanation: "Just as a living fountain provides fresh, never-ending water, Christ offers us spiritual life that never runs dry. Broken cisterns \u2014 the things of the world \u2014 can never hold or satisfy the way Christ can.",
@@ -406,9 +406,9 @@ const ALL_QUESTIONS = [
     question: "How does David\u2019s description of God as a \u201crock\u201d and \u201cfortress\u201d point to Christ?",
     answers: [
       "Christ is our immovable foundation and sure protection \u2014 He is the one we can always rely on for safety and strength",
-      "David liked to hide in rocky caves, so this is about geography",
-      "It means God is hard to approach, like a stone wall",
-      "It refers to the stone tablets of the Ten Commandments"
+      "David found physical refuge in rocky strongholds while fleeing Saul, so he praised God using images from his own experience",
+      "God\u2019s holiness and majesty are so great that approaching Him requires preparation, reverence, and deep humility",
+      "The imagery of rock connects to the stone tablets of the law, reminding Israel that God\u2019s commandments are unchanging"
     ],
     correct: 0,
     explanation: "A rock cannot be moved; a fortress cannot be easily broken. David used these images to teach that Christ is our unshakable foundation and our ultimate protector in times of trial.",
@@ -421,10 +421,10 @@ const ALL_QUESTIONS = [
     description: "The prophet Malachi described the coming Messiah as being like a \u201crefiner\u2019s fire\u201d and \u201cfuller\u2019s soap.\u201d He would sit as a refiner of silver, purifying the sons of Levi until they could offer righteous offerings unto the Lord.",
     question: "What does the image of a refiner\u2019s fire teach about Jesus Christ?",
     answers: [
-      "Christ came to destroy the wicked with literal fire",
-      "It means the last days will be extremely hot",
+      "The Messiah would come in judgment to consume the wicked, burning away all wickedness from the earth with righteous fire",
+      "Malachi was prophesying that the last days would bring fiery trials and tribulations upon the earth before Christ\u2019s return",
       "Christ purifies us through His Atonement \u2014 removing our impurities like a refiner removes dross from precious metal",
-      "It represents the burning of animal sacrifices in the temple"
+      "It represents the sacred fire of the temple altar, where offerings were consumed as part of Israel\u2019s covenant worship"
     ],
     correct: 2,
     explanation: "A silversmith heats silver and carefully removes the impurities until he can see his own reflection in the metal. In the same way, Christ refines us through His Atonement until we reflect His image.",
@@ -437,10 +437,10 @@ const ALL_QUESTIONS = [
     description: "Shadrach, Meshach, and Abed-nego refused to worship the golden idol and were thrown into a furnace heated seven times hotter than usual. But the king saw four men walking unharmed in the fire \u2014 and the fourth looked \u201clike the Son of God.\u201d",
     question: "What does this story teach about Jesus Christ?",
     answers: [
-      "God makes us immune to fire if we are faithful enough",
+      "If we have enough faith and remain perfectly obedient, God will shield us from all physical harm and suffering",
       "Christ stands with us in our trials \u2014 He does not always remove the furnace, but He walks through it with us",
-      "It teaches that prayer can change the temperature of fire",
-      "The fourth figure was an angel, not a symbol of Christ"
+      "The faith of these three men was so powerful that it literally changed the nature of the fire around them",
+      "The fourth figure was a guardian angel sent to protect the faithful, showing that God sends angels in times of need"
     ],
     correct: 1,
     explanation: "The Savior\u2019s presence in the furnace is a powerful reminder that He will support us in our trials. He doesn\u2019t always remove the difficulty, but He is always with us in the middle of it.",
@@ -453,10 +453,10 @@ const ALL_QUESTIONS = [
     description: "When Samuel came to anoint a new king, he saw Jesse\u2019s eldest son Eliab and thought, \u201cSurely the Lord\u2019s anointed is before him.\u201d But the Lord told Samuel not to look on his appearance or height \u2014 \u201cthe Lord looketh on the heart.\u201d The young shepherd David was chosen instead.",
     question: "How does this story reflect Christ\u2019s nature?",
     answers: [
-      "It teaches that tall people shouldn\u2019t be leaders",
+      "God rejected Eliab because outward stature and appearance are never reliable indicators of true spiritual leadership",
       "Like the Lord who chose David, Christ sees our true worth and potential \u2014 He looks past outward appearances and into our hearts",
-      "It means David was the strongest of all the brothers",
-      "It shows that prophets sometimes make mistakes"
+      "David was chosen over his brothers because he had the strongest character and the deepest devotion to keeping God\u2019s flocks",
+      "Even the prophet Samuel was mistaken at first, teaching us that all mortals are limited in their ability to judge others"
     ],
     correct: 1,
     explanation: "Christ does not judge us the way the world does. He sees who we really are and who we can become. This gives hope to everyone who feels overlooked or not enough.",
@@ -470,9 +470,9 @@ const ALL_QUESTIONS = [
     question: "What does this promise teach about Jesus Christ?",
     answers: [
       "Christ has the power to completely cleanse us from sin \u2014 no stain is too deep for His Atonement to remove",
-      "We should wear white clothing to symbolize purity",
-      "Isaiah was a poet who used colorful imagery but wasn\u2019t speaking literally",
-      "God will only forgive small sins, not serious ones"
+      "The imagery of white and scarlet teaches Israel that purity before God requires outward signs of holiness and devotion",
+      "Isaiah used vivid poetic language about colors and dyes to stir Israel\u2019s emotions and call them back to repentance",
+      "God promises forgiveness for those whose sins are small, but the truly scarlet sins require a much deeper form of repentance"
     ],
     correct: 0,
     explanation: "Scarlet dye was permanent in the ancient world \u2014 it could never be washed out. By using this image, the Lord teaches that even sins we think are permanent can be completely erased through the Savior\u2019s Atonement.",
@@ -485,10 +485,10 @@ const ALL_QUESTIONS = [
     description: "When King Ahaz faced invasion and fear, the prophet Isaiah delivered a sign from the Lord: \u201cA virgin shall conceive, and bear a son, and shall call his name Immanuel\u201d \u2014 meaning \u201cGod with us.\u201d",
     question: "What does the name \u201cImmanuel\u201d teach about Jesus Christ?",
     answers: [
-      "It was simply a popular name in ancient Israel",
-      "It refers to a military leader who would defeat Israel\u2019s enemies",
+      "Immanuel was a common name given to children in ancient Israel as a sign of hope and trust in God\u2019s protection",
+      "The name Immanuel pointed to a future warrior-king who would deliver Israel from its enemies through military power",
       "Christ is literally God who came to dwell among us \u2014 He is always with us and will never leave us alone",
-      "It is a title for the prophet Isaiah himself"
+      "Isaiah gave himself the symbolic title of Immanuel to reassure King Ahaz that God was with His prophet during the crisis"
     ],
     correct: 2,
     explanation: "Immanuel means \u201cGod with us.\u201d This is one of the most profound truths of the gospel: Jesus Christ is not a distant God. He came to earth, lived among us, and promises to be with us always.",
@@ -501,10 +501,10 @@ const ALL_QUESTIONS = [
     description: "Isaiah used the tender image of marriage to describe God\u2019s relationship with His covenant people. He declared, \u201cThy Maker is thine husband; the Lord of hosts is his name; and thy Redeemer the Holy One of Israel.\u201d",
     question: "What does the metaphor of God as a \u201chusband\u201d teach about Christ?",
     answers: [
-      "It means everyone must be married to be saved",
+      "Isaiah\u2019s marriage metaphor teaches that entering into the marriage covenant is essential for our eternal salvation and exaltation",
       "Christ is bound to us by covenant \u2014 He is faithful, devoted, and will never abandon His people even when they stray",
-      "It is a cultural custom that has no spiritual meaning",
-      "It only applies to the nation of Israel, not to us today"
+      "The husband imagery was a cultural metaphor common in the ancient Near East that carried no deeper spiritual significance",
+      "This metaphor applied specifically to ancient Israel\u2019s covenant with God, but it does not extend to us in modern times"
     ],
     correct: 1,
     explanation: "Marriage in scripture symbolizes the deepest covenant relationship. Christ is the faithful husband who never breaks His covenants, who pursues us when we wander, and who loves us with perfect, everlasting devotion.",
