@@ -403,7 +403,7 @@ const TEAM_PRESETS = [
   { emoji: '\u{1F981}', color: '#FF9F0A', name: 'Lions of Judah' },
   { emoji: '\u26A1', color: '#0A84FF', name: 'Pillars of Fire' },
   { emoji: '\u{1F30A}', color: '#64D2FF', name: 'Red Sea Walkers' },
-  { emoji: '\u{1F5E1}\uFE0F', color: '#BF5AF2', name: 'Sword of Laban' }
+  { emoji: '\u{1F525}', color: '#BF5AF2', name: 'Burning Bush' }
 ];
 
 // ========== WEBSOCKET CONNECTIONS ==========
@@ -1047,7 +1047,7 @@ function renderLobby() {
       { emoji: '\\u{1F981}', color: '#FF9F0A', name: 'Lions of Judah' },
       { emoji: '\\u26A1', color: '#0A84FF', name: 'Pillars of Fire' },
       { emoji: '\\u{1F30A}', color: '#64D2FF', name: 'Red Sea Walkers' },
-      { emoji: '\\u{1F5E1}\\uFE0F', color: '#BF5AF2', name: 'Sword of Laban' }
+      { emoji: '\\u{1F525}', color: '#BF5AF2', name: 'Burning Bush' }
     ];
     const p = presets[i];
     const count = (state.teamPlayerCounts && state.teamPlayerCounts[i]) || 0;
@@ -1084,7 +1084,7 @@ function setTeamCount(n) {
 function startGame() {
   const teamNames = [];
   for (let i = 0; i < teamCountSetting; i++) {
-    const presets = ['Lions of Judah', 'Pillars of Fire', 'Red Sea Walkers', 'Sword of Laban'];
+    const presets = ['Lions of Judah', 'Pillars of Fire', 'Red Sea Walkers', 'Burning Bush'];
     teamNames.push(presets[i]);
   }
   ws.send(JSON.stringify({ type: 'startGame', teamCount: teamCountSetting, teamNames }));
@@ -1495,7 +1495,7 @@ function renderTeamPicker() {
     { emoji: '\\u{1F981}', color: '#FF9F0A', name: 'Lions of Judah' },
     { emoji: '\\u26A1', color: '#0A84FF', name: 'Pillars of Fire' },
     { emoji: '\\u{1F30A}', color: '#64D2FF', name: 'Red Sea Walkers' },
-    { emoji: '\\u{1F5E1}\\uFE0F', color: '#BF5AF2', name: 'Sword of Laban' }
+    { emoji: '\\u{1F525}', color: '#BF5AF2', name: 'Burning Bush' }
   ];
 
   const picker = document.getElementById('teamPicker');
