@@ -653,10 +653,11 @@ function finishRound() {
 
 // ========== HTTP SERVER ==========
 const server = http.createServer((req, res) => {
-  if (req.url === '/') {
+  const pathname = new URL(req.url, 'http://localhost').pathname;
+  if (pathname === '/') {
     res.writeHead(200, { 'Content-Type': 'text/html' });
     res.end(TEACHER_HTML);
-  } else if (req.url === '/play') {
+  } else if (pathname === '/play') {
     res.writeHead(200, { 'Content-Type': 'text/html' });
     res.end(PLAYER_HTML);
   } else {
