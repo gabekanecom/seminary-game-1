@@ -376,6 +376,7 @@ let gameState = {
   roundAnswers: [],  // { playerId, playerName, teamIndex, answerIndex, timestamp }
   answerMap: [],     // shuffled answer indices for current round
   roomCode: '',
+  scoringMode: 'team',  // 'team' | 'individual' | 'speed'
   timerActive: false,
   timerEnd: 0,
 };
@@ -537,6 +538,7 @@ function handleTeacherMessage(msg) {
       });
     }
 
+    gameState.scoringMode = msg.scoringMode || 'team';
     gameState.questions = shuffle(ALL_QUESTIONS).slice(0, TOTAL_ROUNDS);
     gameState.currentRound = 0;
     gameState.isFinalRound = false;
@@ -597,33 +599,50 @@ function handleTeacherMessage(msg) {
 function autoAwardPoints() {
   const q = gameState.questions[gameState.currentRound];
   if (!q) return;
+  const isBonus = gameState.bonusRounds.has(gameState.currentRound);
+  const basePts = isBonus ? 200 : 100;
 
   // Reset awards
-  gameState.teams.forEach(t => t._awarded = false);
+  gameState.teams.forEach(t => { t._awarded = false; t._roundPts = 0; });
 
-  // Find all correct answers
+  // Find all correct answers sorted by time
   const correctAnswers = gameState.roundAnswers
-    .filter(a => gameState.answerMap[a.answerIndex] === q.correct);
+    .filter(a => gameState.answerMap[a.answerIndex] === q.correct)
+    .sort((a, b) => a.timestamp - b.timestamp);
 
-  // Award every team that had at least one correct answer
-  const awardedTeams = new Set();
-  correctAnswers.forEach(a => {
-    if (!awardedTeams.has(a.teamIndex)) {
-      gameState.teams[a.teamIndex]._awarded = true;
-      awardedTeams.add(a.teamIndex);
+  if (gameState.scoringMode === 'speed') {
+    // Only the first correct team gets points
+    if (correctAnswers.length > 0) {
+      const fastest = correctAnswers[0];
+      gameState.teams[fastest.teamIndex]._awarded = true;
+      gameState.teams[fastest.teamIndex]._roundPts = basePts;
     }
-  });
+  } else if (gameState.scoringMode === 'individual') {
+    // Each correct student adds points to their team
+    correctAnswers.forEach(a => {
+      gameState.teams[a.teamIndex]._awarded = true;
+      gameState.teams[a.teamIndex]._roundPts += basePts;
+    });
+  } else {
+    // 'team' mode — any team with at least one correct answer gets flat points
+    const awardedTeams = new Set();
+    correctAnswers.forEach(a => {
+      if (!awardedTeams.has(a.teamIndex)) {
+        gameState.teams[a.teamIndex]._awarded = true;
+        gameState.teams[a.teamIndex]._roundPts = basePts;
+        awardedTeams.add(a.teamIndex);
+      }
+    });
+  }
 }
 
 function finishRound() {
-  const isBonus = gameState.bonusRounds.has(gameState.currentRound);
-
   gameState.teams.forEach((t, i) => {
     if (t._awarded) {
       if (gameState.isFinalRound) {
         t.score += gameState.wagers[i] || 0;
       } else {
-        t.score += isBonus ? 200 : 100;
+        t.score += t._roundPts || 0;
       }
       t.correctCount++;
     } else if (gameState.isFinalRound) {
@@ -631,6 +650,7 @@ function finishRound() {
       if (t.score < 0) t.score = 0;
     }
     t._awarded = false;
+    t._roundPts = 0;
   });
 
   gameState.currentRound++;
@@ -816,6 +836,13 @@ const TEACHER_HTML = `<!DOCTYPE html>
     background: rgba(255,255,255,0.06); color: var(--text-secondary); font-size: 1rem; font-weight: 600; cursor: pointer;
   }
   .count-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+  .settings-row { display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-bottom: 0.75rem; position: relative; flex-wrap: wrap; }
+  .settings-label { color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; }
+  .mode-btn {
+    padding: 0.4rem 0.9rem; border-radius: 980px; border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.06); color: var(--text-secondary); font-size: 0.8rem; font-weight: 500; cursor: pointer;
+  }
+  .mode-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
   .team-card-mini {
     background: var(--glass); border: 1px solid var(--glass-border); border-radius: 12px; padding: 0.6rem 1.2rem;
     text-align: center; backdrop-filter: blur(20px); min-width: 120px;
@@ -1003,6 +1030,7 @@ const TEACHER_HTML = `<!DOCTYPE html>
 const ws = new WebSocket((location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/?role=teacher');
 let state = {};
 let teamCountSetting = 3;
+let scoringMode = 'team'; // 'team' | 'individual' | 'speed'
 
 ws.onmessage = (e) => {
   state = JSON.parse(e.data);
@@ -1067,8 +1095,15 @@ function renderLobby() {
       '<div class="join-strip-info"><div class="room-code-label">Room Code</div><div class="room-code">' + (state.roomCode || '') + '</div><div class="join-url">Join at <strong>' + playUrl + '</strong></div></div>' +
       '<img class="qr-img" src="' + qrUrl + '" alt="QR Code" width="150" height="150">' +
     '</div>' +
-    '<div class="team-count-row"><span class="team-count-label">Teams:</span>' +
+    '<div class="settings-row"><span class="settings-label">Teams:</span>' +
     [2,3,4].map(n => '<button class="count-btn' + (n === teamCountSetting ? ' active' : '') + '" onclick="setTeamCount(' + n + ')">' + n + '</button>').join('') +
+    '</div>' +
+    '<div class="settings-row"><span class="settings-label">Scoring:</span>' +
+    [
+      { id: 'team', label: 'Team (any correct = 100 pts)' },
+      { id: 'individual', label: 'Individual (100 pts per correct student)' },
+      { id: 'speed', label: 'Speed (first correct team wins)' }
+    ].map(m => '<button class="mode-btn' + (scoringMode === m.id ? ' active' : '') + '" onclick="setScoring(\\\'' + m.id + '\\\')">' + m.label + '</button>').join('') +
     '</div>' +
     '<div class="team-setup">' + teams.join('') + '</div>' +
     '<div class="players-section">' + playerChips + '</div>' +
@@ -1081,13 +1116,18 @@ function setTeamCount(n) {
   renderLobby();
 }
 
+function setScoring(mode) {
+  scoringMode = mode;
+  renderLobby();
+}
+
 function startGame() {
   const teamNames = [];
   for (let i = 0; i < teamCountSetting; i++) {
     const presets = ['Lions of Judah', 'Pillars of Fire', 'Red Sea Walkers', 'Burning Bush'];
     teamNames.push(presets[i]);
   }
-  ws.send(JSON.stringify({ type: 'startGame', teamCount: teamCountSetting, teamNames }));
+  ws.send(JSON.stringify({ type: 'startGame', teamCount: teamCountSetting, teamNames, scoringMode }));
 }
 
 function renderGame() {
