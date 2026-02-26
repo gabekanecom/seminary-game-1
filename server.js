@@ -683,13 +683,35 @@ function autoAwardPoints() {
       gameState.teams[a.teamIndex]._roundPts += basePts;
     });
   } else {
-    // 'team' mode — any team with at least one correct answer gets flat points
-    const awardedTeams = new Set();
-    correctAnswers.forEach(a => {
-      if (!awardedTeams.has(a.teamIndex)) {
-        gameState.teams[a.teamIndex]._awarded = true;
-        gameState.teams[a.teamIndex]._roundPts = basePts;
-        awardedTeams.add(a.teamIndex);
+    // 'team' mode — majority rules: the team's answer is what most players picked
+    gameState.teams.forEach((t, teamIdx) => {
+      const teamAnswers = gameState.roundAnswers.filter(a => a.teamIndex === teamIdx);
+      if (teamAnswers.length === 0) return;
+
+      // Count votes per answer
+      const votes = {};
+      teamAnswers.forEach(a => {
+        votes[a.answerIndex] = (votes[a.answerIndex] || 0) + 1;
+      });
+
+      // Find the answer with the most votes
+      let maxVotes = 0;
+      let majorityAnswer = -1;
+      let tied = false;
+      for (const [ansIdx, count] of Object.entries(votes)) {
+        if (count > maxVotes) {
+          maxVotes = count;
+          majorityAnswer = parseInt(ansIdx);
+          tied = false;
+        } else if (count === maxVotes) {
+          tied = true;
+        }
+      }
+
+      // If tied, no points. If majority answer is correct, award points.
+      if (!tied && gameState.answerMap[majorityAnswer] === q.correct) {
+        t._awarded = true;
+        t._roundPts = basePts;
       }
     });
   }
@@ -1166,7 +1188,7 @@ function renderLobby() {
     '</div>' +
     '<div class="settings-row"><span class="settings-label">Scoring:</span>' +
     [
-      { id: 'team', label: 'Team (any correct = 100 pts)' },
+      { id: 'team', label: 'Team (majority rules)' },
       { id: 'individual', label: 'Individual (100 pts per correct student)' },
       { id: 'speed', label: 'Speed (first correct team wins)' }
     ].map(m => '<button class="mode-btn' + (scoringMode === m.id ? ' active' : '') + '" onclick="setScoring(\\\'' + m.id + '\\\')">' + m.label + '</button>').join('') +
