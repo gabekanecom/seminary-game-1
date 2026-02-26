@@ -1059,7 +1059,7 @@ function renderLobby() {
     '<h1 class="lobby-title">Hidden in<br>Plain Sight</h1>' +
     '<p class="lobby-subtitle">Finding the Savior in the Old Testament</p>' +
     '<div class="room-code-box"><div class="room-code-label">Room Code</div><div class="room-code">' + (state.roomCode || '') + '</div></div>' +
-    '<div class="qr-section"><img class="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(location.origin + '/play') + '" alt="QR Code to join game" width="200" height="200"></div>' +
+    '<div class="qr-section"><img class="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(location.origin + '/play?room=' + (state.roomCode || '')) + '" alt="QR Code to join game" width="200" height="200"></div>' +
     '<p class="join-url">Join at <strong>' + location.origin + '/play</strong></p>' +
     '<div class="team-count-row"><span class="team-count-label">Teams:</span>' +
     [2,3,4].map(n => '<button class="count-btn' + (n === teamCountSetting ? ' active' : '') + '" onclick="setTeamCount(' + n + ')">' + n + '</button>').join('') +
@@ -1476,6 +1476,12 @@ function renderJoin() {
   document.getElementById('roomCode').addEventListener('input', function() {
     this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
   });
+
+  // Auto-fill room code from URL query param
+  const urlRoom = new URLSearchParams(window.location.search).get('room');
+  if (urlRoom) {
+    document.getElementById('roomCode').value = urlRoom.toUpperCase();
+  }
 }
 
 function renderTeamPicker() {
