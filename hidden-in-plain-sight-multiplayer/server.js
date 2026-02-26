@@ -10,7 +10,7 @@ const http = require('http');
 const { WebSocketServer } = require('ws');
 const os = require('os');
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // ========== QUESTION BANK ==========
 const ALL_QUESTIONS = [
@@ -1008,7 +1008,7 @@ const TEACHER_HTML = `<!DOCTYPE html>
 <div class="confetti-container" id="confetti"></div>
 
 <script>
-const ws = new WebSocket('ws://' + location.host + '/?role=teacher');
+const ws = new WebSocket((location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/?role=teacher');
 let state = {};
 let teamCountSetting = 3;
 
@@ -1541,7 +1541,7 @@ function joinGame() {
   if (!name) { errEl.textContent = 'Enter your name'; return; }
   errEl.textContent = '';
 
-  ws = new WebSocket('ws://' + location.host + '/?role=player&name=' + encodeURIComponent(name) + '&team=' + selectedTeam + '&room=' + encodeURIComponent(code));
+  ws = new WebSocket((location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/?role=player&name=' + encodeURIComponent(name) + '&team=' + selectedTeam + '&room=' + encodeURIComponent(code));
 
   ws.onmessage = (e) => {
     const msg = JSON.parse(e.data);
