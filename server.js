@@ -512,6 +512,7 @@ function broadcastGameState() {
       scoringMode: gameState.scoringMode,
       timerEnd: gameState.timerEnd || 0,
       teamLocked: gameState.scoringMode === 'speed' && gameState.roundAnswers.some(a => a.teamIndex === player.teamIndex),
+      teamLockedBy: gameState.scoringMode === 'speed' ? (gameState.roundAnswers.find(a => a.teamIndex === player.teamIndex)?.playerName || '') : '',
     };
 
     if (gameState.phase === 'choices' || gameState.phase === 'revealed') {
@@ -1742,7 +1743,7 @@ function renderPlayView() {
 
   if (s.phase === 'choices') {
     if (s.hasAnswered || s.teamLocked) {
-      const msg = s.teamLocked && !s.hasAnswered ? 'A teammate already answered for your team!' : 'Answer locked in!';
+      const msg = s.teamLocked && !s.hasAnswered ? (s.teamLockedBy + ' answered for your team!') : 'Answer locked in!';
       html += '<div class="play-answered"><div class="check">\\u2713</div>' + msg + '<br><span style="font-size:0.85rem;">Waiting for the teacher to reveal...</span></div>';
     } else {
       if (s.timerEnd > 0) {
