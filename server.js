@@ -926,9 +926,24 @@ wss.on('connection', (ws, req) => {
       return;
     }
 
-    const playerId = nextPlayerId++;
-    gameState.players.push({ id: playerId, name, teamIndex });
-    playerConnections.set(playerId, ws);
+    // Check if this is a reconnecting player (same name + team)
+    let existingPlayer = gameState.players.find(p => p.name === name && p.teamIndex === teamIndex);
+    let playerId;
+
+    if (existingPlayer) {
+      // Reconnect: reuse existing player
+      playerId = existingPlayer.id;
+      const oldWs = playerConnections.get(playerId);
+      if (oldWs && oldWs.readyState <= 1) {
+        try { oldWs.close(); } catch(e) {}
+      }
+      playerConnections.set(playerId, ws);
+    } else {
+      // New player
+      playerId = nextPlayerId++;
+      gameState.players.push({ id: playerId, name, teamIndex });
+      playerConnections.set(playerId, ws);
+    }
 
     ws.send(JSON.stringify({ type: 'joined', playerId, teamIndex, name }));
     broadcastGameState();
@@ -940,11 +955,24 @@ wss.on('connection', (ws, req) => {
     });
 
     ws.on('close', () => {
+      // Don't remove player immediately — allow time for reconnect
       playerConnections.delete(playerId);
-      gameState.players = gameState.players.filter(p => p.id !== playerId);
-      broadcastGameState();
     });
   }
+});
+
+// ========== HEARTBEAT (keep connections alive) ==========
+setInterval(() => {
+  wss.clients.forEach(ws => {
+    if (ws.isAlive === false) return ws.terminate();
+    ws.isAlive = false;
+    ws.ping();
+  });
+}, 25000);
+
+wss.on('connection', (ws) => {
+  ws.isAlive = true;
+  ws.on('pong', () => { ws.isAlive = true; });
 });
 
 // ========== GET LOCAL IP ==========
@@ -1239,15 +1267,22 @@ const TEACHER_HTML = `<!DOCTYPE html>
 <div class="confetti-container" id="confetti"></div>
 
 <script>
-const ws = new WebSocket((location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/?role=teacher');
+let ws;
 let state = {};
 let teamCountSetting = 3;
 let scoringMode = 'team'; // 'team' | 'individual' | 'speed'
 
-ws.onmessage = (e) => {
-  state = JSON.parse(e.data);
-  render();
-};
+function connectTeacher() {
+  ws = new WebSocket((location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/?role=teacher');
+  ws.onmessage = (e) => {
+    state = JSON.parse(e.data);
+    render();
+  };
+  ws.onclose = () => {
+    setTimeout(() => connectTeacher(), 2000);
+  };
+}
+connectTeacher();
 
 // Countdown timer tick
 setInterval(() => {
@@ -1719,6 +1754,7 @@ let ws = null;
 let myState = {};
 let joined = false;
 let selectedTeam = 0;
+let joinParams = {}; // saved for reconnect
 
 // On load, render join form
 renderJoin();
@@ -1789,12 +1825,19 @@ function joinGame() {
   if (!name) { errEl.textContent = 'Enter your name'; return; }
   errEl.textContent = '';
 
-  ws = new WebSocket((location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/?role=player&name=' + encodeURIComponent(name) + '&team=' + selectedTeam + '&room=' + encodeURIComponent(code));
+  joinParams = { name, code, team: selectedTeam };
+  connectPlayer();
+}
+
+function connectPlayer() {
+  const { name, code, team } = joinParams;
+  ws = new WebSocket((location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/?role=player&name=' + encodeURIComponent(name) + '&team=' + team + '&room=' + encodeURIComponent(code));
 
   ws.onmessage = (e) => {
     const msg = JSON.parse(e.data);
     if (msg.type === 'error') {
-      errEl.textContent = msg.message;
+      const errEl = document.getElementById('errorMsg');
+      if (errEl) errEl.textContent = msg.message;
       return;
     }
     if (msg.type === 'joined') {
@@ -1808,7 +1851,8 @@ function joinGame() {
 
   ws.onclose = () => {
     if (joined) {
-      // Reconnect?
+      // Auto-reconnect after 2 seconds
+      setTimeout(() => connectPlayer(), 2000);
     }
   };
 }
