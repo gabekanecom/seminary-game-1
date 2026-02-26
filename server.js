@@ -776,29 +776,31 @@ const TEACHER_HTML = `<!DOCTYPE html>
   .screen.active { display: flex; }
 
   /* ===== LOBBY ===== */
-  .lobby { justify-content: center; align-items: center; text-align: center; padding: 3rem 2rem; position: relative; overflow: hidden; }
+  .lobby { justify-content: center; align-items: center; text-align: center; padding: 1.5rem 2rem; position: relative; overflow: hidden; min-height: 100vh; }
   .lobby::before {
     content: ''; position: absolute; top: -30%; left: 50%; transform: translateX(-50%);
     width: 140%; height: 60%; background: radial-gradient(ellipse, rgba(10,132,255,0.12) 0%, transparent 70%); pointer-events: none;
   }
-  .lobby-icon { font-size: 5rem; margin-bottom: 2rem; animation: pulse 4s ease-in-out infinite; position: relative; }
+  .lobby-header { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 0.25rem; position: relative; }
+  .lobby-icon { font-size: 2.5rem; animation: pulse 4s ease-in-out infinite; }
   @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
-  .lobby-title { font-size: clamp(2.8rem,6vw,4.5rem); font-weight: 700; line-height: 1.05; margin-bottom: 0.75rem; letter-spacing: -0.03em; position: relative; }
-  .lobby-subtitle { font-size: 1.3rem; color: var(--text-secondary); margin-bottom: 2rem; position: relative; }
+  .lobby-title { font-size: clamp(2rem,4vw,3rem); font-weight: 700; line-height: 1.05; letter-spacing: -0.03em; }
+  .lobby-subtitle { font-size: 1rem; color: var(--text-secondary); margin-bottom: 1rem; position: relative; }
 
-  .room-code-box {
-    background: var(--glass); border: 1px solid var(--glass-border); border-radius: 24px; padding: 2rem 3rem;
-    margin-bottom: 1.5rem; backdrop-filter: blur(20px); position: relative;
+  .join-strip {
+    display: flex; align-items: center; justify-content: center; gap: 2rem;
+    background: var(--glass); border: 1px solid var(--glass-border); border-radius: 24px;
+    padding: 1.25rem 2.5rem; margin-bottom: 0.75rem; backdrop-filter: blur(20px); position: relative;
   }
-  .room-code-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-secondary); margin-bottom: 0.5rem; }
-  .room-code { font-size: 4rem; font-weight: 800; letter-spacing: 0.3em; color: var(--accent); font-variant-numeric: tabular-nums; }
-  .qr-section { margin-bottom: 1rem; }
-  .qr-img { border-radius: 12px; background: #fff; padding: 8px; }
-  .join-url { font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 2rem; position: relative; }
+  .join-strip-info { text-align: center; }
+  .room-code-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-secondary); margin-bottom: 0.25rem; }
+  .room-code { font-size: 3rem; font-weight: 800; letter-spacing: 0.3em; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .join-url { font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.4rem; }
   .join-url strong { color: var(--text); word-break: break-all; }
+  .qr-img { border-radius: 10px; background: #fff; padding: 6px; display: block; }
 
-  .players-section { margin-bottom: 2rem; position: relative; min-height: 60px; }
-  .players-label { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.75rem; }
+  .players-section { margin-bottom: 0.75rem; position: relative; min-height: 30px; }
+  .players-label { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem; }
   .player-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; max-width: 600px; }
   .player-chip {
     padding: 0.4rem 0.85rem; border-radius: 980px; font-size: 0.85rem; font-weight: 500;
@@ -806,8 +808,8 @@ const TEACHER_HTML = `<!DOCTYPE html>
   }
 
   /* Team setup in lobby */
-  .team-setup { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem; max-width: 700px; position: relative; }
-  .team-count-row { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 1.5rem; position: relative; }
+  .team-setup { display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap; margin-bottom: 0.75rem; max-width: 700px; position: relative; }
+  .team-count-row { display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-bottom: 0.75rem; position: relative; }
   .team-count-label { color: var(--text-secondary); font-size: 1rem; font-weight: 500; }
   .count-btn {
     width: 44px; height: 44px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.15);
@@ -815,12 +817,12 @@ const TEACHER_HTML = `<!DOCTYPE html>
   }
   .count-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
   .team-card-mini {
-    background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; padding: 1rem 1.5rem;
-    text-align: center; backdrop-filter: blur(20px); min-width: 140px;
+    background: var(--glass); border: 1px solid var(--glass-border); border-radius: 12px; padding: 0.6rem 1.2rem;
+    text-align: center; backdrop-filter: blur(20px); min-width: 120px;
   }
-  .team-card-mini .emoji { font-size: 2rem; margin-bottom: 0.3rem; }
-  .team-card-mini .name { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.2rem; }
-  .team-card-mini .count { font-size: 0.8rem; color: var(--text-secondary); }
+  .team-card-mini .emoji { font-size: 1.4rem; margin-bottom: 0.15rem; }
+  .team-card-mini .name { font-weight: 600; font-size: 0.85rem; margin-bottom: 0.1rem; }
+  .team-card-mini .count { font-size: 0.75rem; color: var(--text-secondary); }
 
   .btn {
     display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
@@ -1055,13 +1057,16 @@ function renderLobby() {
   const playerChips = (state.teams && state.teams.length > 0) ? '' :
     ((state.players || []).length > 0 ? '<div class="players-label">' + state.playerCount + ' player' + (state.playerCount !== 1 ? 's' : '') + ' joined</div>' : '<div class="players-label">Waiting for students to join...</div>');
 
+  const playUrl = location.origin + '/play';
+  const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' + encodeURIComponent(playUrl + '?room=' + (state.roomCode || ''));
+
   el.innerHTML =
-    '<div class="lobby-icon">\\u{1F4DC}</div>' +
-    '<h1 class="lobby-title">Hidden in<br>Plain Sight</h1>' +
+    '<div class="lobby-header"><span class="lobby-icon">\\u{1F4DC}</span><h1 class="lobby-title">Hidden in Plain Sight</h1></div>' +
     '<p class="lobby-subtitle">Finding the Savior in the Old Testament</p>' +
-    '<div class="room-code-box"><div class="room-code-label">Room Code</div><div class="room-code">' + (state.roomCode || '') + '</div></div>' +
-    '<div class="qr-section"><img class="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(location.origin + '/play?room=' + (state.roomCode || '')) + '" alt="QR Code to join game" width="200" height="200"></div>' +
-    '<p class="join-url">Join at <strong>' + location.origin + '/play</strong></p>' +
+    '<div class="join-strip">' +
+      '<div class="join-strip-info"><div class="room-code-label">Room Code</div><div class="room-code">' + (state.roomCode || '') + '</div><div class="join-url">Join at <strong>' + playUrl + '</strong></div></div>' +
+      '<img class="qr-img" src="' + qrUrl + '" alt="QR Code" width="150" height="150">' +
+    '</div>' +
     '<div class="team-count-row"><span class="team-count-label">Teams:</span>' +
     [2,3,4].map(n => '<button class="count-btn' + (n === teamCountSetting ? ' active' : '') + '" onclick="setTeamCount(' + n + ')">' + n + '</button>').join('') +
     '</div>' +
