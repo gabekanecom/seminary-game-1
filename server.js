@@ -791,8 +791,10 @@ const TEACHER_HTML = `<!DOCTYPE html>
   }
   .room-code-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-secondary); margin-bottom: 0.5rem; }
   .room-code { font-size: 4rem; font-weight: 800; letter-spacing: 0.3em; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .qr-section { margin-bottom: 1rem; }
+  .qr-img { border-radius: 12px; background: #fff; padding: 8px; }
   .join-url { font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 2rem; position: relative; }
-  .join-url strong { color: var(--text); }
+  .join-url strong { color: var(--text); word-break: break-all; }
 
   .players-section { margin-bottom: 2rem; position: relative; min-height: 60px; }
   .players-label { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.75rem; }
@@ -1057,7 +1059,8 @@ function renderLobby() {
     '<h1 class="lobby-title">Hidden in<br>Plain Sight</h1>' +
     '<p class="lobby-subtitle">Finding the Savior in the Old Testament</p>' +
     '<div class="room-code-box"><div class="room-code-label">Room Code</div><div class="room-code">' + (state.roomCode || '') + '</div></div>' +
-    '<p class="join-url">Join at <strong>http://' + location.hostname + ':' + location.port + '/play</strong></p>' +
+    '<div class="qr-section"><img class="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(location.origin + '/play') + '" alt="QR Code to join game" width="200" height="200"></div>' +
+    '<p class="join-url">Join at <strong>' + location.origin + '/play</strong></p>' +
     '<div class="team-count-row"><span class="team-count-label">Teams:</span>' +
     [2,3,4].map(n => '<button class="count-btn' + (n === teamCountSetting ? ' active' : '') + '" onclick="setTeamCount(' + n + ')">' + n + '</button>').join('') +
     '</div>' +
