@@ -369,7 +369,7 @@ let gameState = {
   players: [],      // { id, name, teamIndex, ws }
   questions: [],
   currentRound: 0,
-  phase: 'waiting',  // waiting | story | choices | revealed | award
+  phase: 'waiting',  // waiting | story | choices | revealed
   bonusRounds: new Set(),
   isFinalRound: false,
   wagers: [],
@@ -485,11 +485,11 @@ function broadcastGameState() {
       myAnswer: playerAnswer?.answerIndex,
     };
 
-    if (gameState.phase === 'choices' || gameState.phase === 'revealed' || gameState.phase === 'award') {
+    if (gameState.phase === 'choices' || gameState.phase === 'revealed') {
       playerState.question = q?.question;
       playerState.answers = gameState.answerMap.map(origIdx => q?.answers[origIdx]);
     }
-    if (gameState.phase === 'revealed' || gameState.phase === 'award') {
+    if (gameState.phase === 'revealed') {
       playerState.correctIndex = gameState.answerMap.indexOf(q?.correct);
       playerState.explanation = q?.explanation;
       playerState.scripture = q?.scripture;
@@ -567,21 +567,9 @@ function handleTeacherMessage(msg) {
       gameState.phase = 'revealed';
       broadcastGameState();
     } else if (gameState.phase === 'revealed') {
-      gameState.phase = 'award';
-      // Auto-calculate: which teams had a player answer correctly first?
+      // Auto-award points to all teams with a correct answer, then finish round
       autoAwardPoints();
-      broadcastGameState();
-    } else if (gameState.phase === 'award') {
       finishRound();
-    }
-  }
-
-  if (msg.type === 'manualAward') {
-    // Teacher manually toggles team award
-    const idx = msg.teamIndex;
-    if (idx >= 0 && idx < gameState.teams.length) {
-      gameState.teams[idx]._awarded = !gameState.teams[idx]._awarded;
-      broadcastGameState();
     }
   }
 
@@ -613,19 +601,18 @@ function autoAwardPoints() {
   // Reset awards
   gameState.teams.forEach(t => t._awarded = false);
 
-  // Find first correct answer per team
+  // Find all correct answers
   const correctAnswers = gameState.roundAnswers
-    .filter(a => gameState.answerMap[a.answerIndex] === q.correct)
-    .sort((a, b) => a.timestamp - b.timestamp);
+    .filter(a => gameState.answerMap[a.answerIndex] === q.correct);
 
-  // Award the team that had the FIRST correct answer
+  // Award every team that had at least one correct answer
   const awardedTeams = new Set();
-  if (correctAnswers.length > 0) {
-    // Award the fastest team
-    const fastest = correctAnswers[0];
-    gameState.teams[fastest.teamIndex]._awarded = true;
-    awardedTeams.add(fastest.teamIndex);
-  }
+  correctAnswers.forEach(a => {
+    if (!awardedTeams.has(a.teamIndex)) {
+      gameState.teams[a.teamIndex]._awarded = true;
+      awardedTeams.add(a.teamIndex);
+    }
+  });
 }
 
 function finishRound() {
@@ -1029,12 +1016,6 @@ document.addEventListener('keydown', (e) => {
       ws.send(JSON.stringify({ type: 'advance' }));
     }
   }
-  if (e.code >= 'Digit1' && e.code <= 'Digit4' && state.phase === 'award') {
-    const idx = parseInt(e.code.replace('Digit','')) - 1;
-    if (idx < (state.teams?.length || 0)) {
-      ws.send(JSON.stringify({ type: 'manualAward', teamIndex: idx }));
-    }
-  }
 });
 
 function render() {
@@ -1118,7 +1099,7 @@ function renderGame() {
   else if (isBonus) html += '<span class="round-badge bonus">Double Points</span>';
   else html += '<span class="round-badge normal">Standard</span>';
 
-  const hints = { story: 'Press Space to show answers', choices: 'Students are answering on their phones...', revealed: 'Press Space to award points', award: 'Press Space for next round' };
+  const hints = { story: 'Press Space to show answers', choices: 'Students are answering on their phones...', revealed: 'Press Space for next round' };
   html += '<span class="teacher-hint">' + (hints[state.phase] || '') + '</span>';
   html += '</div>';
 
@@ -1132,7 +1113,7 @@ function renderGame() {
   html += '</div>';
 
   // Answers tracker (who has answered)
-  if (state.phase === 'choices' || state.phase === 'revealed' || state.phase === 'award') {
+  if (state.phase === 'choices' || state.phase === 'revealed') {
     html += '<div class="answers-tracker">';
     const answers = state.roundAnswers || [];
     if (answers.length === 0 && state.phase === 'choices') {
@@ -1165,7 +1146,7 @@ function renderGame() {
     html += '<div class="answers-list">';
     state.answerMap.forEach((origIdx, dispIdx) => {
       let cls = '';
-      if (state.phase === 'revealed' || state.phase === 'award') {
+      if (state.phase === 'revealed') {
         cls = origIdx === q.correct ? 'correct' : 'wrong';
       }
       html += '<div class="answer-option ' + cls + '">';
@@ -1176,7 +1157,7 @@ function renderGame() {
   }
 
   // Explanation
-  if (state.phase === 'revealed' || state.phase === 'award') {
+  if (state.phase === 'revealed') {
     html += '<div class="explanation-box">';
     html += '<div class="explanation-heading">The Connection to Christ</div>';
     html += '<div class="explanation-body">' + q.explanation + '</div>';
@@ -1187,21 +1168,9 @@ function renderGame() {
 
   // Teacher controls
   html += '<div class="teacher-controls">';
-  if (state.phase === 'award') {
-    const isBonus2 = state.bonusRounds && state.bonusRounds.includes(state.currentRound);
-    const pts = state.isFinalRound ? 'wager' : (isBonus2 ? '200' : '100');
-    html += '<span class="award-label">Award ' + pts + ' pts:</span>';
-    (state.teams || []).forEach((t, i) => {
-      html += '<button class="award-team-btn' + (t._awarded ? ' awarded' : '') + '" onclick="toggleAward(' + i + ')">';
-      html += t.emoji + ' ' + t.name + ' <span class="key-hint">' + (i+1) + '</span></button>';
-    });
-    html += '<span style="color:rgba(255,255,255,0.12)">\\u2022</span>';
-    html += '<button class="btn btn-gold" onclick="advance()" style="padding:0.6rem 1.5rem;font-size:0.9rem;">Done <span class="key-hint">Space</span></button>';
-  } else {
-    const actionLabels = { story: 'Show answers', choices: 'Reveal answer', revealed: 'Award points' };
-    html += '<button class="btn btn-gold" onclick="advance()" style="padding:0.6rem 1.5rem;font-size:0.9rem;">' +
-      (actionLabels[state.phase] || 'Next') + ' <span class="key-hint">Space</span></button>';
-  }
+  const actionLabels = { story: 'Show answers', choices: 'Reveal answer', revealed: 'Next round' };
+  html += '<button class="btn btn-gold" onclick="advance()" style="padding:0.6rem 1.5rem;font-size:0.9rem;">' +
+    (actionLabels[state.phase] || 'Next') + ' <span class="key-hint">Space</span></button>';
   html += '</div>';
 
   el.innerHTML = html;
@@ -1209,10 +1178,6 @@ function renderGame() {
 
 function advance() {
   ws.send(JSON.stringify({ type: 'advance' }));
-}
-
-function toggleAward(idx) {
-  ws.send(JSON.stringify({ type: 'manualAward', teamIndex: idx }));
 }
 
 function renderScoreboard() {
@@ -1657,7 +1622,7 @@ function renderPlayView() {
     }
   }
 
-  if (s.phase === 'revealed' || s.phase === 'award') {
+  if (s.phase === 'revealed') {
     const correctIdx = s.correctIndex;
     const myAnswer = s.myAnswer;
     const gotIt = myAnswer === correctIdx;
