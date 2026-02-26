@@ -1,0 +1,1785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hidden in Plain Sight — Team Edition</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #000000;
+    --surface: rgba(255,255,255,0.05);
+    --glass: rgba(255,255,255,0.08);
+    --glass-border: rgba(255,255,255,0.1);
+    --text: #f5f5f7;
+    --text-secondary: rgba(255,255,255,0.55);
+    --accent: #0A84FF;
+    --accent-hover: #409CFF;
+    --green: #30D158;
+    --red: #FF453A;
+    --orange: #FF9F0A;
+    --label: rgba(255,255,255,0.35);
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    cursor: default;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .screen { display: none; min-height: 100vh; }
+  .screen.active { display: flex; flex-direction: column; }
+
+  /* ====== BUTTONS ====== */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.85rem 2rem;
+    border: none;
+    border-radius: 980px;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+    position: relative;
+    letter-spacing: -0.01em;
+  }
+  .btn:active { transform: scale(0.97); }
+
+  .btn-gold {
+    background: var(--accent);
+    color: white;
+  }
+  .btn-gold:hover { background: var(--accent-hover); filter: brightness(1.1); }
+
+  .btn-outline {
+    background: var(--glass);
+    color: var(--text);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+  .btn-outline:hover { background: rgba(255,255,255,0.12); }
+
+  .btn-green { background: var(--green); color: white; }
+  .btn-red { background: var(--red); color: white; }
+
+  /* ====== WELCOME SCREEN ====== */
+  #welcome {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 3rem 2rem;
+    background: #000;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #welcome::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 140%;
+    height: 60%;
+    background: radial-gradient(ellipse, rgba(10,132,255,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .welcome-icon {
+    font-size: 5rem;
+    margin-bottom: 2rem;
+    animation: gentlePulse 4s ease-in-out infinite;
+    position: relative;
+  }
+  @keyframes gentlePulse {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  .welcome-title {
+    font-size: clamp(2.8rem, 6vw, 4.5rem);
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.05;
+    margin-bottom: 0.75rem;
+    position: relative;
+    letter-spacing: -0.03em;
+  }
+
+  .welcome-subtitle {
+    font-size: 1.3rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+    margin-bottom: 2.5rem;
+    position: relative;
+    letter-spacing: -0.01em;
+  }
+
+  .welcome-desc {
+    font-size: 1.1rem;
+    line-height: 1.65;
+    max-width: 520px;
+    margin-bottom: 3rem;
+    color: var(--text-secondary);
+    position: relative;
+    font-weight: 400;
+  }
+
+  /* ====== SETUP SCREEN ====== */
+  #setup {
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 2rem;
+    background: #000;
+  }
+
+  .setup-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+    text-align: center;
+    letter-spacing: -0.02em;
+  }
+
+  .setup-subtitle {
+    color: var(--text-secondary);
+    font-weight: 400;
+    margin-bottom: 2.5rem;
+    text-align: center;
+  }
+
+  .team-setup-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    max-width: 680px;
+    width: 100%;
+    margin-bottom: 2.5rem;
+  }
+
+  .team-setup-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .team-emoji { font-size: 2.8rem; margin-bottom: 0.75rem; }
+
+  .team-name-input {
+    width: 100%;
+    padding: 0.65rem 1rem;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.06);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    outline: none;
+    transition: all 0.2s;
+    letter-spacing: -0.01em;
+  }
+  .team-name-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(10,132,255,0.25); }
+  .team-name-input::placeholder { color: rgba(255,255,255,0.25); }
+
+  .team-count-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+  }
+
+  .team-count-label { color: var(--text-secondary); font-size: 1rem; font-weight: 500; }
+
+  .team-count-btns { display: flex; gap: 0.4rem; }
+  .count-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.06);
+    color: var(--text-secondary);
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .count-btn:hover { background: rgba(255,255,255,0.1); }
+  .count-btn.active {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+
+  /* ====== GAME SCREEN ====== */
+  #game {
+    background: #000;
+    padding: 0;
+  }
+
+  .game-top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.65rem 1.75rem;
+    background: rgba(28,28,30,0.85);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    flex-shrink: 0;
+  }
+
+  .round-label {
+    font-weight: 600;
+    color: var(--text);
+    font-size: 0.95rem;
+    letter-spacing: -0.01em;
+  }
+
+  .round-type-badge {
+    padding: 0.2rem 0.7rem;
+    border-radius: 980px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .round-type-badge.normal { background: rgba(255,255,255,0.08); color: var(--text-secondary); }
+  .round-type-badge.bonus { background: rgba(255,69,58,0.18); color: var(--red); animation: glowBadge 2s ease infinite; }
+  @keyframes glowBadge { 50% { background: rgba(255,69,58,0.28); } }
+
+  .teacher-hint {
+    font-size: 0.75rem;
+    color: var(--label);
+    font-weight: 400;
+  }
+
+  /* Team scoreboard strip */
+  .scoreboard-strip {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    padding: 0;
+    background: rgba(28,28,30,0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    flex-shrink: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .strip-team {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.55rem 1rem;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  .strip-team + .strip-team { border-left: 1px solid rgba(255,255,255,0.04); }
+
+  .strip-emoji { font-size: 1.15rem; }
+  .strip-name { font-weight: 500; font-size: 0.85rem; color: var(--text-secondary); }
+  .strip-score {
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .strip-team.leading { background: rgba(10,132,255,0.06); }
+  .strip-team.leading .strip-score { color: var(--accent); }
+
+  /* Timer */
+  .timer-container {
+    height: 3px;
+    background: rgba(255,255,255,0.04);
+    flex-shrink: 0;
+  }
+  .timer-fill {
+    height: 100%;
+    background: var(--accent);
+    transition: width 0.1s linear;
+    width: 100%;
+    border-radius: 0 2px 2px 0;
+  }
+  .timer-fill.warning { background: var(--orange); }
+  .timer-fill.danger { background: var(--red); animation: flashBar 0.5s ease infinite; }
+  @keyframes flashBar { 50% { opacity: 0.4; } }
+  .timer-fill.paused { background: rgba(255,255,255,0.15); }
+
+  /* Main content area */
+  .game-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .game-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 2rem 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  /* Story card */
+  .story-card {
+    background: rgba(28,28,30,0.7);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 2rem 2.5rem;
+  }
+
+  .story-header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .story-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+
+  .story-ref {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+  }
+
+  .story-text {
+    font-size: 1.25rem;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.85);
+    font-weight: 400;
+  }
+
+  /* Question */
+  .question-text {
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--text);
+    text-align: center;
+    padding: 0.25rem 0;
+    letter-spacing: -0.01em;
+  }
+
+  /* Answer options */
+  .answers-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .answer-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    padding: 1.2rem 1.4rem;
+    background: rgba(28,28,30,0.6);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    font-size: 1.1rem;
+    line-height: 1.55;
+    transition: all 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
+    cursor: default;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    font-weight: 400;
+  }
+
+  .answer-letter-lg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.08);
+    color: var(--text-secondary);
+    font-weight: 700;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+  }
+
+  .answer-option.correct-reveal {
+    border-color: var(--green);
+    background: rgba(48,209,88,0.1);
+    animation: correctGlow 0.4s ease;
+  }
+  .answer-option.correct-reveal .answer-letter-lg {
+    background: var(--green);
+    color: white;
+  }
+
+  .answer-option.wrong-fade { opacity: 0.3; }
+
+  @keyframes correctGlow {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.01); }
+    100% { transform: scale(1); }
+  }
+
+  /* Explanation */
+  .explanation-box {
+    background: rgba(48,209,88,0.05);
+    border: 1px solid rgba(48,209,88,0.15);
+    border-radius: 18px;
+    padding: 1.75rem 2rem;
+    animation: fadeSlideUp 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .explanation-heading {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--green);
+    margin-bottom: 0.6rem;
+  }
+
+  .explanation-body {
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.85);
+    font-weight: 400;
+  }
+
+  .explanation-verse {
+    font-style: italic;
+    color: var(--text-secondary);
+    margin-top: 0.75rem;
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Teacher controls footer */
+  .teacher-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1.75rem;
+    background: rgba(28,28,30,0.85);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    flex-shrink: 0;
+    flex-wrap: wrap;
+  }
+
+  .award-label {
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+
+  .award-team-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.06);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .award-team-btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.15); }
+  .award-team-btn.awarded {
+    border-color: var(--green);
+    background: rgba(48,209,88,0.12);
+    color: var(--green);
+  }
+
+  .divider-dot { color: rgba(255,255,255,0.12); }
+
+  /* ====== SCOREBOARD SCREEN ====== */
+  #scoreboard {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 3rem 2rem;
+    background: #000;
+  }
+
+  .sb-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+    letter-spacing: -0.02em;
+  }
+
+  .sb-subtitle {
+    color: var(--text-secondary);
+    margin-bottom: 2.5rem;
+    font-size: 1.05rem;
+    font-weight: 400;
+  }
+
+  .sb-teams {
+    display: flex;
+    gap: 1.25rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+    max-width: 900px;
+  }
+
+  .sb-team-card {
+    background: rgba(28,28,30,0.7);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 22px;
+    padding: 2rem 2.5rem;
+    min-width: 190px;
+    flex: 1;
+    max-width: 240px;
+    transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+    position: relative;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .sb-team-card.first-place {
+    border-color: rgba(10,132,255,0.4);
+    background: rgba(10,132,255,0.08);
+    transform: scale(1.04);
+  }
+
+  .sb-team-emoji { font-size: 3.2rem; margin-bottom: 0.6rem; }
+  .sb-team-name { font-size: 1.15rem; font-weight: 600; color: var(--text); margin-bottom: 0.4rem; letter-spacing: -0.01em; }
+  .sb-team-score { font-size: 2.8rem; font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .sb-team-correct { font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem; font-weight: 400; }
+
+  .crown-badge {
+    position: absolute;
+    top: -12px;
+    right: -8px;
+    font-size: 1.8rem;
+    animation: crownBounce 2s ease-in-out infinite;
+  }
+  @keyframes crownBounce { 0%,100%{transform:rotate(-3deg)} 50%{transform:rotate(3deg)} }
+
+  /* ====== FINAL RESULTS ====== */
+  #finalResults {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 3rem 2rem;
+    background: #000;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .final-icon { font-size: 5rem; margin-bottom: 1.25rem; animation: gentlePulse 3s ease-in-out infinite; position: relative; }
+
+  .final-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.25rem;
+    position: relative;
+    letter-spacing: -0.03em;
+  }
+
+  .final-winner {
+    font-size: clamp(1.3rem, 3.5vw, 2rem);
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    position: relative;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .final-teams { display: flex; gap: 1.25rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2.5rem; max-width: 900px; position: relative; }
+
+  .final-message {
+    font-size: 1.15rem;
+    line-height: 1.7;
+    max-width: 560px;
+    font-style: italic;
+    color: var(--text-secondary);
+    margin-bottom: 2.5rem;
+    position: relative;
+    font-weight: 400;
+  }
+
+  /* ====== WAGER SCREEN ====== */
+  #wager {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 3rem 2rem;
+    background: #000;
+    position: relative;
+  }
+
+  #wager::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 140%;
+    height: 50%;
+    background: radial-gradient(ellipse, rgba(255,69,58,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .wager-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--red);
+    margin-bottom: 0.4rem;
+    letter-spacing: -0.02em;
+    position: relative;
+  }
+
+  .wager-subtitle {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    margin-bottom: 2.5rem;
+    font-weight: 400;
+    position: relative;
+  }
+
+  .wager-teams {
+    display: flex;
+    gap: 1.25rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+    max-width: 900px;
+    position: relative;
+  }
+
+  .wager-card {
+    background: rgba(28,28,30,0.7);
+    border: 1px solid rgba(255,69,58,0.2);
+    border-radius: 22px;
+    padding: 1.5rem 2rem;
+    min-width: 180px;
+    flex: 1;
+    max-width: 220px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .wager-team-emoji { font-size: 2.4rem; margin-bottom: 0.5rem; }
+  .wager-team-name { font-weight: 600; color: var(--text); margin-bottom: 0.2rem; letter-spacing: -0.01em; }
+  .wager-team-has { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.75rem; font-weight: 400; }
+
+  .wager-input {
+    width: 100%;
+    padding: 0.55rem;
+    border: 1px solid rgba(255,69,58,0.25);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.06);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-align: center;
+    outline: none;
+    font-variant-numeric: tabular-nums;
+    transition: all 0.2s;
+  }
+  .wager-input:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(255,69,58,0.2); }
+
+  .wager-instructions {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    max-width: 500px;
+    font-weight: 400;
+    position: relative;
+  }
+
+  /* Confetti */
+  .confetti-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 999;
+    overflow: hidden;
+  }
+  .confetti-piece {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    top: -10px;
+    animation: confettiFall linear forwards;
+  }
+  @keyframes confettiFall {
+    to { top: 110vh; transform: rotate(720deg); }
+  }
+
+  /* Points popup */
+  .points-popup {
+    position: fixed;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: var(--text);
+    pointer-events: none;
+    z-index: 100;
+    animation: popAnim 1.1s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+    letter-spacing: -0.02em;
+  }
+  .points-popup.wrong { color: var(--red); }
+  @keyframes popAnim {
+    0% { opacity:0; transform: translate(-50%,-50%) scale(0.5); }
+    20% { opacity:1; transform: translate(-50%,-50%) scale(1.1); }
+    60% { opacity:1; transform: translate(-50%,-60%) scale(1); }
+    100% { opacity:0; transform: translate(-50%,-80%) scale(0.9); }
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .game-scroll { padding: 1.5rem; }
+    .answers-list { grid-template-columns: 1fr; }
+    .team-setup-grid { grid-template-columns: 1fr; }
+  }
+
+  /* Keyboard hints */
+  .key-hint {
+    display: inline-block;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 5px;
+    padding: 0.1rem 0.4rem;
+    font-size: 0.7rem;
+    font-family: 'SF Mono', SFMono-Regular, ui-monospace, Menlo, monospace;
+    color: var(--label);
+    margin-left: 0.25rem;
+    vertical-align: middle;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+</style>
+</head>
+<body>
+
+<!-- ====== WELCOME ====== -->
+<div id="welcome" class="screen active">
+  <div class="welcome-icon">📜</div>
+  <h1 class="welcome-title">Hidden in<br>Plain Sight</h1>
+  <p class="welcome-subtitle">Finding the Savior in the Old Testament</p>
+  <p class="welcome-desc">
+    The Old Testament is filled with people, events, and symbols that point to Jesus Christ.
+    In this team game, you'll read Old Testament stories together and race to find
+    how each one testifies of the Savior.
+  </p>
+  <button class="btn btn-gold" onclick="showScreen('setup')" style="position:relative;">Set Up Teams</button>
+</div>
+
+<!-- ====== TEAM SETUP ====== -->
+<div id="setup" class="screen">
+  <div class="setup-title">Team Setup</div>
+  <p class="setup-subtitle">Choose how many teams, then name them</p>
+
+  <div class="team-count-row">
+    <span class="team-count-label">Number of teams:</span>
+    <div class="team-count-btns">
+      <button class="count-btn" onclick="setTeamCount(2)">2</button>
+      <button class="count-btn active" onclick="setTeamCount(3)">3</button>
+      <button class="count-btn" onclick="setTeamCount(4)">4</button>
+    </div>
+  </div>
+
+  <div class="team-setup-grid" id="teamSetupGrid"></div>
+
+  <button class="btn btn-gold" onclick="beginGame()">Start the Game</button>
+</div>
+
+<!-- ====== GAME SCREEN ====== -->
+<div id="game" class="screen">
+  <div class="game-top-bar">
+    <span class="round-label" id="roundLabel">Round 1 / 22</span>
+    <span class="round-type-badge normal" id="roundBadge">Standard</span>
+    <span class="teacher-hint" id="teacherHint">Press Space to advance</span>
+  </div>
+  <div class="scoreboard-strip" id="scoreStrip"></div>
+  <div class="timer-container">
+    <div class="timer-fill" id="timerFill"></div>
+  </div>
+  <div class="game-content">
+    <div class="game-scroll" id="gameScroll"></div>
+  </div>
+  <div class="teacher-controls" id="teacherControls"></div>
+</div>
+
+<!-- ====== SCOREBOARD BETWEEN ROUNDS ====== -->
+<div id="scoreboard" class="screen">
+  <div class="sb-title" id="sbTitle">Scoreboard</div>
+  <p class="sb-subtitle" id="sbSubtitle"></p>
+  <div class="sb-teams" id="sbTeams"></div>
+  <button class="btn btn-gold" id="sbNextBtn" onclick="nextFromScoreboard()">Next Round</button>
+</div>
+
+<!-- ====== WAGER SCREEN ====== -->
+<div id="wager" class="screen">
+  <div class="wager-title">Final Round Wager</div>
+  <p class="wager-subtitle">Each team can wager up to their current score on the final question!</p>
+  <p class="wager-instructions">Have each team decide privately, then enter their wagers below.</p>
+  <div class="wager-teams" id="wagerTeams"></div>
+  <button class="btn btn-red" onclick="startFinalRound()">Lock In Wagers &amp; Go</button>
+</div>
+
+<!-- ====== FINAL RESULTS ====== -->
+<div id="finalResults" class="screen">
+  <div class="final-icon" id="finalIcon">🏆</div>
+  <h2 class="final-title" id="finalTitle">Champions!</h2>
+  <p class="final-winner" id="finalWinner"></p>
+  <div class="final-teams" id="finalTeamsContainer"></div>
+  <p class="final-message">
+    Every story in the Old Testament can teach us about Jesus Christ.
+    The more you look for Him, the more you'll find Him — in every book, every page, every verse.
+  </p>
+  <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;position:relative;">
+    <button class="btn btn-gold" onclick="location.reload()">Play Again</button>
+  </div>
+</div>
+
+<div class="confetti-container" id="confettiContainer"></div>
+
+<script>
+// ============================
+// QUESTION BANK (12 questions)
+// ============================
+const ALL_QUESTIONS = [
+  {
+    story: "Abraham and Isaac on Mount Moriah",
+    reference: "Genesis 22:1–14",
+    description: "God asked Abraham to offer his son Isaac as a sacrifice on Mount Moriah. Abraham obeyed, and as he raised the knife, an angel stopped him. A ram caught in a thicket was provided as a substitute sacrifice. Abraham named the place \"Jehovah-jireh\" — the Lord will provide.",
+    question: "How does this story point to Jesus Christ?",
+    answers: [
+      "A loving Father was willing to sacrifice His Only Begotten Son — and a substitute was provided",
+      "God wants us to obey even when it's hard",
+      "Animals were used in ancient worship ceremonies",
+      "Mountains are sacred places of revelation"
+    ],
+    correct: 0,
+    explanation: "Just as Abraham was willing to sacrifice Isaac, Heavenly Father offered His Only Begotten Son. Isaac carried the wood for his own sacrifice, as Jesus carried His cross. A substitute (the ram) was provided — pointing to Christ as the ultimate substitute for all of us. Mount Moriah is traditionally the same location where the temple — and eventually Calvary — would stand.",
+    scripture: "\"God will provide himself a lamb for a burnt offering\" — Genesis 22:8"
+  },
+  {
+    story: "The Passover Lamb in Egypt",
+    reference: "Exodus 12:3–13",
+    description: "Before the final plague in Egypt, each Israelite family was told to choose a lamb without blemish, sacrifice it, and paint its blood on their doorposts. The destroyer would then \"pass over\" those homes, sparing their firstborn from death.",
+    question: "What does the Passover lamb represent?",
+    answers: [
+      "The importance of following Moses as a prophet",
+      "Jesus Christ, the Lamb of God, whose blood saves us from spiritual death",
+      "The need to prepare food before a long journey",
+      "God's power over the Egyptian gods"
+    ],
+    correct: 1,
+    explanation: "The Passover lamb had to be \"without blemish\" — just as Christ was sinless. Its blood on the doorpost saved families from death, just as Christ's atoning blood saves us from spiritual death. Remarkably, Jesus was crucified during the Passover feast — fulfilling the very symbol Israel had kept for over a thousand years.",
+    scripture: "\"Behold the Lamb of God, which taketh away the sin of the world\" — John 1:29"
+  },
+  {
+    story: "Moses Lifts the Brazen Serpent",
+    reference: "Numbers 21:6–9",
+    description: "When poisonous serpents bit the Israelites in the wilderness, Moses was commanded to make a serpent of brass and lift it high on a pole. Anyone who had been bitten could simply look upon the brass serpent and live.",
+    question: "What did the serpent lifted on the pole symbolize?",
+    answers: [
+      "The healing power of bronze metal in ancient times",
+      "Moses's role as a skilled craftsman",
+      "Christ being \"lifted up\" on the cross — all who look to Him will be saved",
+      "The danger of complaining against God"
+    ],
+    correct: 2,
+    explanation: "Jesus Himself explained this connection directly. Just as the Israelites had to look up at the brazen serpent to be physically healed, we must look to Christ — lifted upon the cross — to be spiritually healed and saved. The simplicity of the act was the test: would they trust God enough to just look?",
+    scripture: "\"As Moses lifted up the serpent in the wilderness, even so must the Son of man be lifted up\" — John 3:14"
+  },
+  {
+    story: "Joseph Sold into Egypt",
+    reference: "Genesis 37; 45:1–8",
+    description: "Joseph's brothers were jealous of him. They sold him for twenty pieces of silver and told their father he was dead. Years later, Joseph rose to become the second most powerful man in Egypt and saved his entire family from famine — weeping as he forgave the very brothers who betrayed him.",
+    question: "How is Joseph a \"type\" of Christ?",
+    answers: [
+      "He wore colorful clothing like ancient priests",
+      "He had prophetic dreams about the stars and moon",
+      "He was betrayed and sold for silver, yet rose to power, saved his people, and freely forgave those who wronged him",
+      "He lived in a foreign country for many years"
+    ],
+    correct: 2,
+    explanation: "Like Christ, Joseph was betrayed by those closest to him and sold for silver. He suffered unjustly, was raised to a position of great power, then became the deliverer and savior of his people. And perhaps most powerfully, he freely forgave those who had wronged him — just as the Savior does for each of us.",
+    scripture: "\"Ye thought evil against me; but God meant it unto good … to save much people alive\" — Genesis 50:20"
+  },
+  {
+    story: "Manna from Heaven",
+    reference: "Exodus 16:14–18, 31",
+    description: "When the Israelites were hungry in the wilderness, God sent bread from heaven each morning — a small, white, sweet substance they called manna. It appeared on the ground like dew and had to be gathered fresh every day. It sustained Israel for forty years.",
+    question: "What did the manna foreshadow?",
+    answers: [
+      "Jesus Christ, the true \"Bread of Life\" sent from heaven to sustain us spiritually",
+      "The importance of eating breakfast each morning",
+      "God's ability to create new kinds of food",
+      "The need to store provisions for long journeys"
+    ],
+    correct: 0,
+    explanation: "Jesus taught that He is the true bread from heaven. Just as manna was given freely each day to sustain physical life, Christ offers Himself freely to sustain our spiritual lives. The manna could not be hoarded — it had to be gathered daily. In the same way, we need to come to Christ daily, not just once.",
+    scripture: "\"I am the bread of life: he that cometh to me shall never hunger\" — John 6:35"
+  },
+  {
+    story: "Water from the Rock at Horeb",
+    reference: "Exodus 17:1–6",
+    description: "When the Israelites were desperate for water in the desert, the Lord told Moses to strike a rock at Horeb with his rod. When he did, water poured from the rock and the people drank freely and were saved from death.",
+    question: "What does the rock that gave water represent?",
+    answers: [
+      "The importance of geology in finding water sources",
+      "Moses's authority as a prophet",
+      "Jesus Christ — the source of \"living water\" that quenches spiritual thirst",
+      "The strength and endurance of the Israelites"
+    ],
+    correct: 2,
+    explanation: "The apostle Paul taught directly that \"that Rock was Christ.\" The water that saved the Israelites from physical death in the desert points to the living water Christ offers us — salvation from spiritual death. He is the rock, the foundation, and the source of life. Just as water came from the rock after it was struck, living water flows from Christ through His suffering.",
+    scripture: "\"They drank of that spiritual Rock that followed them: and that Rock was Christ\" — 1 Corinthians 10:4"
+  },
+  {
+    story: "The Day of Atonement",
+    reference: "Leviticus 16:7–10, 21–22",
+    description: "Once a year on the holiest day, the high priest took two goats. One was sacrificed as a sin offering. The other — the \"scapegoat\" — had the sins of all the people symbolically placed upon its head through the laying on of hands. It was then sent into the wilderness, carrying their sins far away.",
+    question: "How does the Day of Atonement point to Christ?",
+    answers: [
+      "It teaches the importance of annual religious holidays",
+      "Christ took upon Himself the sins of the world and carried them away — He is both sacrifice and scapegoat",
+      "It shows that animals were important to Israelite culture",
+      "It represents the need for a priesthood leader in every community"
+    ],
+    correct: 1,
+    explanation: "The entire Day of Atonement ceremony was a powerful symbol of what Jesus would do. He is both the sacrificial offering (the goat that was slain) and the one who carries our sins away into the wilderness (the scapegoat). The high priest entering the Holy of Holies — the only person, one day a year — foreshadowed Christ entering God's presence on our behalf.",
+    scripture: "\"The Lord hath laid on him the iniquity of us all\" — Isaiah 53:6"
+  },
+  {
+    story: "Jonah and the Great Fish",
+    reference: "Jonah 1:17; 2:10",
+    description: "The prophet Jonah fled from God's command and was swallowed by a great fish. He spent three days and three nights in complete darkness inside its belly. On the third day, he was brought forth alive — and then went on to call the people of Nineveh to repentance, and they were saved.",
+    question: "What did Jonah's three days in the fish foreshadow?",
+    answers: [
+      "The importance of ocean travel in the ancient world",
+      "That God can use sea creatures to accomplish His purposes",
+      "Christ's three days in the tomb before His glorious resurrection",
+      "The danger of disobeying God's commands"
+    ],
+    correct: 2,
+    explanation: "Jesus specifically pointed to Jonah as a sign of His own death and resurrection. Just as Jonah spent three days in darkness and was then brought forth alive, Christ spent three days in the tomb and rose again — bringing the hope of resurrection to every person who has ever lived.",
+    scripture: "\"As Jonas was three days and three nights in the whale's belly; so shall the Son of man be three days and three nights in the heart of the earth\" — Matthew 12:40"
+  },
+  {
+    story: "The Suffering Servant",
+    reference: "Isaiah 53:3–7",
+    description: "Seven hundred years before Christ's birth, the prophet Isaiah described a future figure who would be \"despised and rejected,\" a \"man of sorrows\" acquainted with grief. He would be \"wounded for our transgressions\" and \"bruised for our iniquities.\" He would be led \"as a lamb to the slaughter\" and would not open his mouth in His own defense.",
+    question: "Who is the Suffering Servant Isaiah described?",
+    answers: [
+      "The nation of Israel as a whole",
+      "Isaiah himself, suffering for his people",
+      "A future king of Babylon",
+      "Jesus Christ — this is a direct messianic prophecy of His atoning sacrifice"
+    ],
+    correct: 3,
+    explanation: "Isaiah 53 is one of the most remarkable and detailed prophecies of Jesus Christ in all scripture, written some 700 years before His birth. Every detail — the rejection, the silence before accusers, the suffering for others' sins, being \"numbered with the transgressors\" — was precisely fulfilled by Jesus Christ in His final hours.",
+    scripture: "\"He was wounded for our transgressions, he was bruised for our iniquities: the chastisement of our peace was upon him\" — Isaiah 53:5"
+  },
+  {
+    story: "Adam and the Fall",
+    reference: "Genesis 3:17–19; Moses 6:48",
+    description: "When Adam and Eve partook of the fruit, the Fall brought both physical and spiritual death into the world. God told Adam that \"by the sweat of thy face shalt thou eat bread, till thou return unto the ground.\" But even in that moment, God promised that a future Savior would come to overcome what the Fall had set in motion.",
+    question: "How does Adam's story connect to Jesus Christ?",
+    answers: [
+      "It teaches us the importance of gardening and agriculture",
+      "Christ is the \"second Adam\" who overcame the Fall — redeeming us from both physical and spiritual death",
+      "It shows that obedience to God's commandments is always rewarded immediately",
+      "Adam's story is about the creation of the earth, not about Christ"
+    ],
+    correct: 1,
+    explanation: "Adam brought the Fall, which made mortality and death a reality for all of us. Christ, called the \"last Adam\" by Paul, overcame both physical and spiritual death through His atonement and resurrection. Where Adam's choice brought death into the world, Christ's sacrifice brings life. The entire plan of salvation depends on this connection between the two.",
+    scripture: "\"For as in Adam all die, even so in Christ shall all be made alive\" — 1 Corinthians 15:22"
+  },
+  {
+    story: "Ruth and Boaz — The Kinsman Redeemer",
+    reference: "Ruth 3–4",
+    description: "Ruth, a Moabite widow, was destitute, vulnerable, and far from home. Boaz, a wealthy and honorable relative of her late husband, chose to act as her \"kinsman redeemer.\" Under the law of Israel, he had the family right, the resources, and — most importantly — the willingness to redeem her and restore everything that had been lost.",
+    question: "How does Boaz represent Jesus Christ?",
+    answers: [
+      "He was wealthy, showing that God blesses the righteous with riches",
+      "He married a foreigner, showing God accepts all nations",
+      "Like Christ our Redeemer, he had the family right, the power, and the loving willingness to save someone who could not save herself",
+      "He was a farmer, symbolizing the harvest of souls"
+    ],
+    correct: 2,
+    explanation: "Boaz is one of the most beautiful \"types\" of Christ in the Old Testament. As a kinsman redeemer, he had the family connection (right), the wealth and position (power), and the compassionate willingness (love) to redeem Ruth. Christ is our Kinsman Redeemer — He took on our mortal nature, has infinite power to save, and does so out of perfect, pure love.",
+    scripture: "\"I know that my redeemer liveth\" — Job 19:25"
+  },
+  {
+    story: "Melchizedek, King of Salem",
+    reference: "Genesis 14:18–20",
+    description: "After Abraham rescued his nephew Lot from captivity, he was met by a mysterious and powerful figure: Melchizedek — the king of Salem and also a priest of the most high God. Melchizedek brought out bread and wine and blessed Abraham, and Abraham gave him tithes of everything.",
+    question: "Why is Melchizedek considered a type of Christ?",
+    answers: [
+      "He was both a king and a priest — foreshadowing Christ's role as King of Kings and our Great High Priest",
+      "He lived in the city of Salem, which later became a holy city",
+      "He collected tithes, showing the importance of paying tithing",
+      "He served bread and wine as part of ancient hospitality customs"
+    ],
+    correct: 0,
+    explanation: "Melchizedek uniquely combined the roles of both king and priest — just as Christ is both the King of Kings and our Great High Priest who intercedes for us before God. The bread and wine he offered foreshadow the sacrament of the Lord's Supper. Even his name means \"King of Righteousness,\" and Salem means \"Peace\" — both titles that perfectly describe Jesus Christ.",
+    scripture: "\"Thou art a priest for ever after the order of Melchizedek\" — Psalm 110:4"
+  },
+  {
+    story: "The Ark of the Covenant",
+    reference: "Exodus 25:10–22",
+    description: "God commanded Moses to build a sacred chest overlaid with gold — the Ark of the Covenant. Inside were placed the tablets of the law, a pot of manna, and Aaron's rod that budded. Above it sat the mercy seat, where God's presence dwelt between two golden cherubim. It was the most sacred object in all of Israel.",
+    question: "How does the Ark of the Covenant symbolize Jesus Christ?",
+    answers: [
+      "It was made of gold, representing the wealth of Israel",
+      "It was carried by the Levites, showing the importance of priesthood duties",
+      "Like Christ, it held God's law within it, provided life-giving bread, and was the place where God's presence and mercy met mankind",
+      "It was kept hidden from the people, symbolizing mysteries"
+    ],
+    correct: 2,
+    explanation: "The Ark is a stunning symbol of Christ. It contained the law (Christ perfectly fulfilled the law), manna (He is the Bread of Life), and Aaron's rod that budded (He is the resurrection and the life). The mercy seat on top was where God's presence met His people — just as Christ is the mediator through whom we access the Father's mercy and grace.",
+    scripture: "\"There I will meet with thee, and I will commune with thee from above the mercy seat\" — Exodus 25:22"
+  },
+  {
+    story: "Jacob's Ladder",
+    reference: "Genesis 28:12–17",
+    description: "While fleeing from his brother Esau, Jacob slept on a stone pillow and dreamed of a great ladder reaching from earth to heaven. Angels ascended and descended on it, and the Lord stood at the top, renewing His covenant promises to Jacob. Jacob awoke and said, \"This is the gate of heaven.\"",
+    question: "How does Jacob's ladder point to Jesus Christ?",
+    answers: [
+      "It shows that angels are messengers of God",
+      "Christ is the connection between heaven and earth — the only way by which we can ascend to God",
+      "It represents the importance of making covenants in holy places",
+      "It symbolizes the difficulty of the path to heaven"
+    ],
+    correct: 1,
+    explanation: "Jesus identified Himself as the fulfillment of Jacob's ladder. He is the bridge between heaven and earth, the way by which God descends to us and we ascend to Him. There is no other way to reach the Father except through Christ — He is literally the connection between mortality and eternity.",
+    scripture: "\"Hereafter ye shall see heaven open, and the angels of God ascending and descending upon the Son of man\" — John 1:51"
+  },
+  {
+    story: "Moses Parts the Red Sea",
+    reference: "Exodus 14:13–22",
+    description: "With Pharaoh's army charging behind them and the sea blocking their path forward, the Israelites were trapped with no way of escape. Moses stretched out his hand, and God parted the Red Sea, creating a dry path through the waters. Israel walked through to safety, delivered from bondage and death.",
+    question: "How does the parting of the Red Sea symbolize what Christ does for us?",
+    answers: [
+      "It demonstrates God's power over nature",
+      "Christ delivers us from the bondage of sin and death — making a way through when there seems to be no way",
+      "It shows the importance of following a prophet's instructions",
+      "It symbolizes the power of prayer in times of crisis"
+    ],
+    correct: 1,
+    explanation: "The Israelites were trapped between slavery (behind them) and death (the sea ahead). There was no human escape. But God made a way through the impossible. This is what Christ does for each of us — we are trapped between sin and death with no way to save ourselves, and He opens a path to deliverance that we could never create on our own.",
+    scripture: "\"Fear ye not, stand still, and see the salvation of the Lord\" — Exodus 14:13"
+  },
+  {
+    story: "The Tabernacle and Its Veil",
+    reference: "Exodus 26:31–33",
+    description: "Inside the tabernacle, a thick, ornate veil separated the Holy Place from the Holy of Holies — the inner room where God's presence dwelt. No one could pass through the veil except the high priest, and only once a year on the Day of Atonement, and only with the blood of a sacrifice.",
+    question: "What did the veil of the tabernacle represent?",
+    answers: [
+      "The separation between God and mankind — which Christ's sacrifice tore open, giving all of us access to the Father",
+      "The beauty of Israelite craftsmanship and artistry",
+      "The importance of privacy in worship",
+      "A reminder that some knowledge should remain hidden"
+    ],
+    correct: 0,
+    explanation: "The veil represented the barrier between sinful humanity and a holy God. When Jesus died on the cross, the veil of the temple was miraculously torn from top to bottom — signifying that through His sacrifice, the way to God's presence is now open to everyone, not just the high priest once a year. Christ Himself became the new and living way.",
+    scripture: "\"Jesus … yielded up the ghost. And, behold, the veil of the temple was rent in twain from the top to the bottom\" — Matthew 27:50–51"
+  },
+  {
+    story: "Daniel in the Lions' Den",
+    reference: "Daniel 6:16–23",
+    description: "Daniel was thrown into a den of hungry lions because he refused to stop praying to God. A stone was placed over the mouth of the den and sealed. The next morning, the king rushed to the den and found Daniel alive and unharmed — God had sent an angel to shut the lions' mouths. Daniel was brought up out of the den without a scratch.",
+    question: "How does Daniel's experience parallel the story of Jesus Christ?",
+    answers: [
+      "Both were condemned by jealous enemies, sealed in a stone-covered place, and came forth alive — conquering death",
+      "It teaches that prayer is more powerful than any danger",
+      "Lions represent Satan, and God protects us from evil",
+      "It shows the importance of obeying God's laws above man's laws"
+    ],
+    correct: 0,
+    explanation: "The parallels are remarkable. Like Christ, Daniel was condemned by jealous conspirators despite his innocence. He was placed in a pit sealed with a stone. He was expected to be dead — but was found alive the next morning. He emerged from the sealed den unharmed. Daniel's deliverance foreshadows Christ's ultimate victory over death and the sealed tomb.",
+    scripture: "\"My God hath sent his angel, and hath shut the lions' mouths … and no manner of hurt was found upon him\" — Daniel 6:22–23"
+  },
+  {
+    story: "Noah's Ark and the Flood",
+    reference: "Genesis 6:14–18; 7:1",
+    description: "When the earth was filled with wickedness, God told Noah to build an ark — the only means of salvation from the coming flood. Noah's family and the animals entered the ark, and God Himself shut the door. The rains came, the waters covered the earth, and only those inside the ark were saved.",
+    question: "How does the ark represent Jesus Christ?",
+    answers: [
+      "It shows that God rewards those who do hard physical labor",
+      "Christ is the only means of salvation — just as the ark was the only refuge from destruction, He is our only refuge from sin and death",
+      "It demonstrates the importance of caring for animals",
+      "It symbolizes the importance of family unity"
+    ],
+    correct: 1,
+    explanation: "The ark was the sole means of salvation — there was no other way to survive the flood. In the same way, Jesus Christ is the only way to be saved from spiritual destruction. Peter himself made this connection, comparing baptism (which points to Christ) to the waters of Noah. God shut the door of the ark — just as the Father provided the way of salvation through His Son.",
+    scripture: "\"The Lord shut him in\" — Genesis 7:16"
+  },
+  {
+    story: "The Bronze Altar of Burnt Offering",
+    reference: "Exodus 27:1–8; Leviticus 1:3–9",
+    description: "At the entrance to the tabernacle stood a great bronze altar where animals were sacrificed as burnt offerings. The animal had to be \"without blemish.\" The person bringing the offering would lay their hands on the animal's head — symbolically transferring their sins — before it was sacrificed in their place.",
+    question: "What did the burnt offering on the altar foreshadow?",
+    answers: [
+      "The importance of tithing and financial sacrifice",
+      "Christ's perfect, sinless sacrifice on the cross — He took our sins upon Himself and died in our place",
+      "That worship requires physical effort and dedication",
+      "The agricultural economy of ancient Israel"
+    ],
+    correct: 1,
+    explanation: "Every element of the burnt offering pointed to Christ. The animal had to be without blemish — Christ was sinless. The offerer laid hands on its head to transfer sins — our sins were laid upon Christ. The animal died in the person's place — Christ died as our substitute. The entire sacrificial system existed to teach Israel about the coming Savior's atoning sacrifice.",
+    scripture: "\"He hath made him to be sin for us, who knew no sin; that we might be made the righteousness of God in him\" — 2 Corinthians 5:21"
+  },
+  {
+    story: "Joshua Leads Israel into the Promised Land",
+    reference: "Joshua 1:1–9; 3:14–17",
+    description: "After Moses died, Joshua was chosen to lead Israel across the Jordan River and into the promised land. As the priests carrying the ark stepped into the flooded Jordan, the waters parted and all Israel crossed on dry ground. Joshua then led them to conquer and inherit the land God had promised.",
+    question: "How is Joshua a type of Jesus Christ?",
+    answers: [
+      "He was a great military commander, symbolizing God's power in battle",
+      "His name is the Hebrew form of \"Jesus\" — and like Christ, he led God's people through the waters of death into the promised inheritance",
+      "He replaced Moses, showing that the old must give way to the new",
+      "He divided the land among the tribes, symbolizing fairness and justice"
+    ],
+    correct: 1,
+    explanation: "Joshua's very name — Yehoshua — is the Hebrew form of \"Jesus,\" meaning \"the Lord saves.\" Just as Joshua led Israel through the Jordan (a symbol of death) into the promised land, Jesus leads us through death into eternal life. Moses (the law) could not bring Israel into the promised land — only Joshua (Jesus/grace) could complete the journey.",
+    scripture: "\"As I was with Moses, so I will be with thee: I will not fail thee, nor forsake thee\" — Joshua 1:5"
+  },
+  {
+    story: "Elijah's Sacrifice on Mount Carmel",
+    reference: "1 Kings 18:30–39",
+    description: "On Mount Carmel, Elijah challenged the prophets of Baal to a contest: each side would prepare a sacrifice, and the God who answered by sending fire from heaven would be proven true. The prophets of Baal cried out all day with no answer. Then Elijah soaked his altar with water, prayed once, and fire fell from heaven, consuming the sacrifice, the stones, the water — everything.",
+    question: "How does this event point to Christ?",
+    answers: [
+      "Elijah's sacrifice, drenched and impossible to ignite by human effort, was accepted by God's power alone — like Christ's atonement, which accomplishes what no human effort ever could",
+      "It proves that prayer can solve all problems",
+      "Fire represents the Holy Ghost, which will come to all who ask",
+      "It shows that true prophets are always vindicated in dramatic fashion"
+    ],
+    correct: 0,
+    explanation: "Elijah made the sacrifice impossible by human standards — soaked with water three times — yet God's fire consumed everything. This points to the central truth of Christ's atonement: salvation is accomplished by God's power, not human effort. No amount of our own striving could save us. Only the fire of God's grace, through Christ's sacrifice, can consume our sins completely.",
+    scripture: "\"By grace are ye saved through faith; and that not of yourselves: it is the gift of God\" — Ephesians 2:8"
+  },
+  {
+    story: "David and Goliath",
+    reference: "1 Samuel 17:4–50",
+    description: "The giant Goliath — heavily armed and seemingly invincible — terrorized all of Israel. No soldier dared fight him. Then David, a young shepherd with no armor, stepped forward to face the giant on behalf of his people. With just a stone and a sling, David struck Goliath down and won the victory for all Israel.",
+    question: "How does David's victory over Goliath foreshadow Christ?",
+    answers: [
+      "It teaches that courage is the most important virtue",
+      "David represents how physical strength doesn't matter in spiritual battles",
+      "Like Christ, David was an unlikely champion who fought an enemy no one else could defeat — winning the victory not for himself, but for all his people",
+      "It shows that God favors shepherds over soldiers"
+    ],
+    correct: 2,
+    explanation: "David was not fighting for personal glory — he fought so that \"all the earth may know that there is a God in Israel.\" As a humble shepherd facing an invincible foe, David prefigures Christ, who as the Good Shepherd faced sin, death, and Satan — enemies none of us could defeat — and won the victory for all of us. David's people did nothing but watch and receive the deliverance.",
+    scripture: "\"The battle is the Lord's, and he will give you into our hands\" — 1 Samuel 17:47"
+  },
+  {
+    story: "The Prophet Hosea and His Unfaithful Wife",
+    reference: "Hosea 1–3",
+    description: "God told the prophet Hosea to marry Gomer, a woman who would be unfaithful to him. Despite her repeated unfaithfulness, God commanded Hosea to go after her, buy her back from slavery, and love her again. Hosea's painful, unconditional love for his wayward wife was a living parable of God's love for Israel.",
+    question: "How does Hosea's story illustrate Christ's love for us?",
+    answers: [
+      "It teaches the importance of marriage covenants",
+      "It shows that prophets must be willing to suffer",
+      "Like Christ, Hosea redeemed his beloved at great personal cost — buying back one who had gone astray, offering love that was never earned or deserved",
+      "It warns against the consequences of unfaithfulness"
+    ],
+    correct: 2,
+    explanation: "Hosea's love for Gomer is one of the most powerful pictures of Christ's love in all of scripture. We are like Gomer — unfaithful, wandering, even enslaved by our sins. And yet Christ, like Hosea, pursues us, pays the price to redeem us, and loves us with an everlasting love we did nothing to deserve. He buys us back not because we earned it, but because His love never fails.",
+    scripture: "\"I will betroth thee unto me for ever; yea, I will betroth thee unto me in righteousness, and in judgment, and in lovingkindness\" — Hosea 2:19"
+  }
+];
+
+// ============================
+// TEAM COLORS & EMOJIS
+// ============================
+const TEAM_PRESETS = [
+  { emoji: '🦁', color: '#FF9F0A', name: 'Lions of Judah' },
+  { emoji: '⚡', color: '#0A84FF', name: 'Pillars of Fire' },
+  { emoji: '🌊', color: '#64D2FF', name: 'Red Sea Walkers' },
+  { emoji: '🗡️', color: '#BF5AF2', name: 'Sword of Laban' }
+];
+
+// ============================
+// GAME STATE
+// ============================
+let teamCount = 3;
+let teams = [];
+let questions = [];
+let currentRound = 0;
+const TOTAL_ROUNDS = 22;
+let phase = 'story'; // 'story' | 'choices' | 'revealed' | 'award'
+let timerInterval = null;
+let timeLeft = 0;
+const DISCUSSION_TIME = 90; // seconds for team discussion
+let timerPaused = false;
+let wagers = [];
+let isFinalRound = false;
+let bonusRounds = new Set();
+
+// ============================
+// INIT
+// ============================
+window.addEventListener('load', () => {
+  setTeamCount(3);
+});
+
+// Keyboard controls
+document.addEventListener('keydown', (e) => {
+  if (e.code === 'Space' || e.code === 'Enter') {
+    e.preventDefault();
+    advanceGame();
+  }
+  if (e.code === 'KeyP') {
+    toggleTimer();
+  }
+  // Number keys 1-4 for awarding points
+  if (e.code >= 'Digit1' && e.code <= 'Digit4') {
+    const idx = parseInt(e.code.replace('Digit','')) - 1;
+    if (idx < teams.length) {
+      const btn = document.querySelector(`.award-team-btn[data-idx="${idx}"]`);
+      if (btn && !btn.classList.contains('hidden-btn')) toggleAward(idx);
+    }
+  }
+});
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ============================
+// TEAM SETUP
+// ============================
+function setTeamCount(n) {
+  teamCount = n;
+  document.querySelectorAll('.count-btn').forEach((btn, i) => {
+    btn.classList.toggle('active', [2,3,4][i] === n);
+  });
+  renderTeamSetup();
+}
+
+function renderTeamSetup() {
+  const grid = document.getElementById('teamSetupGrid');
+  grid.innerHTML = '';
+  for (let i = 0; i < teamCount; i++) {
+    const p = TEAM_PRESETS[i];
+    grid.innerHTML += `
+      <div class="team-setup-card" style="border-color: ${p.color}33;">
+        <div class="team-emoji">${p.emoji}</div>
+        <input class="team-name-input" id="teamName${i}"
+               value="${p.name}" placeholder="Team ${i+1} name"
+               style="border-color: ${p.color}55; color: ${p.color};"
+               onfocus="this.select()">
+      </div>
+    `;
+  }
+}
+
+// ============================
+// START GAME
+// ============================
+function beginGame() {
+  teams = [];
+  for (let i = 0; i < teamCount; i++) {
+    const nameEl = document.getElementById(`teamName${i}`);
+    teams.push({
+      name: nameEl.value || `Team ${i+1}`,
+      emoji: TEAM_PRESETS[i].emoji,
+      color: TEAM_PRESETS[i].color,
+      score: 0,
+      correctCount: 0,
+      awarded: false
+    });
+  }
+
+  questions = shuffle(ALL_QUESTIONS).slice(0, TOTAL_ROUNDS);
+  currentRound = 0;
+  isFinalRound = false;
+
+  // Pick 3 random bonus rounds (not first, not last)
+  bonusRounds = new Set();
+  const eligible = [];
+  for (let i = 1; i < TOTAL_ROUNDS - 1; i++) eligible.push(i);
+  const shuffled = shuffle(eligible);
+  for (let i = 0; i < Math.min(5, shuffled.length); i++) bonusRounds.add(shuffled[i]);
+
+  showScreen('game');
+  loadRound();
+}
+
+// ============================
+// LOAD ROUND
+// ============================
+function loadRound() {
+  clearInterval(timerInterval);
+  timerPaused = false;
+
+  const q = questions[currentRound];
+  const isBonus = bonusRounds.has(currentRound);
+  const isLast = currentRound === TOTAL_ROUNDS - 1;
+
+  // Header
+  document.getElementById('roundLabel').textContent = `Round ${currentRound + 1} / ${TOTAL_ROUNDS}`;
+
+  const badge = document.getElementById('roundBadge');
+  if (isLast && isFinalRound) {
+    badge.textContent = 'Final Wager';
+    badge.className = 'round-type-badge bonus';
+  } else if (isBonus) {
+    badge.textContent = 'Double Points';
+    badge.className = 'round-type-badge bonus';
+  } else {
+    badge.textContent = 'Standard';
+    badge.className = 'round-type-badge normal';
+  }
+
+  document.getElementById('teacherHint').textContent = 'Press Space to show answers';
+
+  // Scoreboard strip
+  updateScoreStrip();
+
+  // Timer reset
+  const tf = document.getElementById('timerFill');
+  tf.style.width = '100%';
+  tf.className = 'timer-fill';
+
+  // Content: start with story only
+  phase = 'story';
+
+  const scroll = document.getElementById('gameScroll');
+  scroll.innerHTML = `
+    <div class="story-card">
+      <div class="story-header">
+        <span class="story-title">${q.story}</span>
+        <span class="story-ref">${q.reference}</span>
+      </div>
+      <div class="story-text">${q.description}</div>
+    </div>
+  `;
+  scroll.scrollTop = 0;
+
+  // Teacher controls: just a prompt
+  const controls = document.getElementById('teacherControls');
+  controls.innerHTML = `<span class="teacher-hint">Read the story aloud, then press <span class="key-hint">Space</span> to reveal the question &amp; answers</span>`;
+
+  // Reset awards
+  teams.forEach(t => t.awarded = false);
+}
+
+// ============================
+// ADVANCE: teacher presses Space
+// ============================
+function advanceGame() {
+  const activeScreen = document.querySelector('.screen.active');
+
+  if (activeScreen.id === 'scoreboard') {
+    nextFromScoreboard();
+    return;
+  }
+
+  if (activeScreen.id !== 'game') return;
+
+  if (phase === 'story') {
+    showChoices();
+  } else if (phase === 'choices') {
+    revealAnswer();
+  } else if (phase === 'revealed') {
+    showAwardPhase();
+  } else if (phase === 'award') {
+    finishRound();
+  }
+}
+
+// ============================
+// PHASE: Show answer choices + start timer
+// ============================
+function showChoices() {
+  phase = 'choices';
+
+  const q = questions[currentRound];
+  const scroll = document.getElementById('gameScroll');
+
+  // Shuffle answers
+  const letters = ['A', 'B', 'C', 'D'];
+  const indices = shuffle([0, 1, 2, 3]);
+
+  // Store mapping for reveal
+  window._answerMap = indices;
+
+  const answersHTML = indices.map((origIdx, dispIdx) => `
+    <div class="answer-option" data-orig="${origIdx}" id="ans-${dispIdx}">
+      <span class="answer-letter-lg">${letters[dispIdx]}</span>
+      <span>${q.answers[origIdx]}</span>
+    </div>
+  `).join('');
+
+  scroll.innerHTML += `
+    <div class="question-text" style="animation: fadeSlideUp 0.4s ease">${q.question}</div>
+    <div class="answers-list" style="animation: fadeSlideUp 0.5s ease">${answersHTML}</div>
+  `;
+
+  document.getElementById('teacherHint').textContent = 'Teams discuss — press Space when ready to reveal';
+
+  // Timer
+  startTimer();
+
+  // Controls
+  const controls = document.getElementById('teacherControls');
+  controls.innerHTML = `
+    <span class="teacher-hint">Let teams discuss, then press <span class="key-hint">Space</span> to reveal the answer &nbsp;|&nbsp; <span class="key-hint">P</span> pause timer</span>
+  `;
+}
+
+// ============================
+// PHASE: Reveal correct answer
+// ============================
+function revealAnswer() {
+  phase = 'revealed';
+  clearInterval(timerInterval);
+
+  const q = questions[currentRound];
+  const scroll = document.getElementById('gameScroll');
+
+  // Highlight correct, fade wrong
+  document.querySelectorAll('.answer-option').forEach(el => {
+    const orig = parseInt(el.dataset.orig);
+    if (orig === q.correct) {
+      el.classList.add('correct-reveal');
+    } else {
+      el.classList.add('wrong-fade');
+    }
+  });
+
+  // Show explanation
+  scroll.innerHTML += `
+    <div class="explanation-box">
+      <div class="explanation-heading">The Connection to Christ</div>
+      <div class="explanation-body">${q.explanation}</div>
+      <div class="explanation-verse">${q.scripture}</div>
+    </div>
+  `;
+
+  setTimeout(() => {
+    document.querySelector('.explanation-box').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 150);
+
+  document.getElementById('teacherHint').textContent = 'Discuss the answer, then press Space to award points';
+
+  const controls = document.getElementById('teacherControls');
+  controls.innerHTML = `<span class="teacher-hint">Discuss the connection with the class, then press <span class="key-hint">Space</span> to award points</span>`;
+}
+
+// ============================
+// PHASE: Award points to teams
+// ============================
+function showAwardPhase() {
+  phase = 'award';
+
+  const isBonus = bonusRounds.has(currentRound);
+  const points = (isFinalRound) ? 0 : (isBonus ? 200 : 100);
+
+  document.getElementById('teacherHint').textContent = 'Click teams that answered correctly, then press Space';
+
+  const controls = document.getElementById('teacherControls');
+
+  if (isFinalRound) {
+    // Final round: use wagers
+    let html = `<span class="award-label">Final round — click teams that got it right:</span>`;
+    teams.forEach((t, i) => {
+      html += `<button class="award-team-btn" data-idx="${i}" onclick="toggleAward(${i})">
+        ${t.emoji} ${t.name} <span class="key-hint">${i+1}</span>
+      </button>`;
+    });
+    html += `<span class="divider-dot">•</span>
+      <button class="btn btn-gold" onclick="finishRound()" style="padding:0.6rem 1.5rem;font-size:0.9rem;">
+        Done <span class="key-hint">Space</span>
+      </button>`;
+    controls.innerHTML = html;
+  } else {
+    let html = `<span class="award-label">Award ${points} pts${isBonus ? ' (DOUBLE!)' : ''}:</span>`;
+    teams.forEach((t, i) => {
+      html += `<button class="award-team-btn" data-idx="${i}" onclick="toggleAward(${i})">
+        ${t.emoji} ${t.name} <span class="key-hint">${i+1}</span>
+      </button>`;
+    });
+    html += `<span class="divider-dot">•</span>
+      <button class="btn btn-gold" onclick="finishRound()" style="padding:0.6rem 1.5rem;font-size:0.9rem;">
+        Done <span class="key-hint">Space</span>
+      </button>`;
+    controls.innerHTML = html;
+  }
+}
+
+function toggleAward(idx) {
+  teams[idx].awarded = !teams[idx].awarded;
+  const btn = document.querySelector(`.award-team-btn[data-idx="${idx}"]`);
+  if (btn) btn.classList.toggle('awarded', teams[idx].awarded);
+}
+
+// ============================
+// FINISH ROUND: apply scores, show scoreboard
+// ============================
+function finishRound() {
+  const isBonus = bonusRounds.has(currentRound);
+
+  teams.forEach((t, i) => {
+    if (t.awarded) {
+      if (isFinalRound) {
+        t.score += wagers[i] || 0;
+      } else {
+        t.score += isBonus ? 200 : 100;
+      }
+      t.correctCount++;
+    } else if (isFinalRound) {
+      t.score -= wagers[i] || 0;
+      if (t.score < 0) t.score = 0;
+    }
+    t.awarded = false;
+  });
+
+  currentRound++;
+
+  if (currentRound >= TOTAL_ROUNDS) {
+    showFinalResults();
+  } else if (currentRound === TOTAL_ROUNDS - 1) {
+    // Before last round: offer wager
+    showWagerScreen();
+  } else {
+    showScoreboard();
+  }
+}
+
+// ============================
+// SCOREBOARD BETWEEN ROUNDS
+// ============================
+function showScoreboard() {
+  showScreen('scoreboard');
+
+  const sorted = [...teams].sort((a, b) => b.score - a.score);
+  const topScore = sorted[0].score;
+
+  document.getElementById('sbTitle').textContent = `After Round ${currentRound}`;
+  const nextIsBonus = bonusRounds.has(currentRound);
+  document.getElementById('sbSubtitle').textContent = nextIsBonus
+    ? 'Next round is DOUBLE POINTS!'
+    : `${TOTAL_ROUNDS - currentRound} rounds remaining`;
+
+  const container = document.getElementById('sbTeams');
+  container.innerHTML = sorted.map((t, i) => `
+    <div class="sb-team-card ${i === 0 && topScore > 0 ? 'first-place' : ''}" style="border-color: ${t.color}44;">
+      ${i === 0 && topScore > 0 ? '<div class="crown-badge">👑</div>' : ''}
+      <div class="sb-team-emoji">${t.emoji}</div>
+      <div class="sb-team-name">${t.name}</div>
+      <div class="sb-team-score" style="color: ${t.color};">${t.score}</div>
+      <div class="sb-team-correct">${t.correctCount} correct</div>
+    </div>
+  `).join('');
+
+  const btn = document.getElementById('sbNextBtn');
+  btn.textContent = currentRound === TOTAL_ROUNDS - 1 ? 'Final Round' : 'Next Round →';
+}
+
+function nextFromScoreboard() {
+  showScreen('game');
+  loadRound();
+}
+
+// ============================
+// WAGER SCREEN (before final round)
+// ============================
+function showWagerScreen() {
+  showScreen('wager');
+
+  const container = document.getElementById('wagerTeams');
+  container.innerHTML = teams.map((t, i) => `
+    <div class="wager-card" style="border-color: ${t.color}44;">
+      <div class="wager-team-emoji">${t.emoji}</div>
+      <div class="wager-team-name">${t.name}</div>
+      <div class="wager-team-has">Current score: ${t.score}</div>
+      <input class="wager-input" id="wager-${i}" type="number" min="0" max="${t.score}"
+             placeholder="0" style="color: ${t.color};" onfocus="this.select()">
+    </div>
+  `).join('');
+}
+
+function startFinalRound() {
+  wagers = [];
+  teams.forEach((t, i) => {
+    const input = document.getElementById(`wager-${i}`);
+    let val = parseInt(input.value) || 0;
+    if (val < 0) val = 0;
+    if (val > t.score) val = t.score;
+    wagers.push(val);
+  });
+
+  isFinalRound = true;
+  showScreen('game');
+  loadRound();
+}
+
+// ============================
+// FINAL RESULTS
+// ============================
+function showFinalResults() {
+  showScreen('finalResults');
+
+  const sorted = [...teams].sort((a, b) => b.score - a.score);
+  const winner = sorted[0];
+
+  document.getElementById('finalIcon').textContent = '🏆';
+  document.getElementById('finalTitle').textContent = 'Game Over!';
+  document.getElementById('finalWinner').innerHTML = `${winner.emoji} ${winner.name} wins with ${winner.score} points!`;
+
+  const container = document.getElementById('finalTeamsContainer');
+  container.innerHTML = sorted.map((t, i) => `
+    <div class="sb-team-card ${i === 0 ? 'first-place' : ''}" style="border-color: ${t.color}44;">
+      ${i === 0 ? '<div class="crown-badge">👑</div>' : ''}
+      <div class="sb-team-emoji">${t.emoji}</div>
+      <div class="sb-team-name">${t.name}</div>
+      <div class="sb-team-score" style="color: ${t.color};">${t.score}</div>
+      <div class="sb-team-correct">${t.correctCount} of ${TOTAL_ROUNDS} correct</div>
+    </div>
+  `).join('');
+
+  launchConfetti();
+}
+
+// ============================
+// TIMER
+// ============================
+function startTimer() {
+  clearInterval(timerInterval);
+  timeLeft = DISCUSSION_TIME;
+  timerPaused = false;
+  const fill = document.getElementById('timerFill');
+  fill.style.width = '100%';
+  fill.className = 'timer-fill';
+
+  timerInterval = setInterval(() => {
+    if (timerPaused) return;
+    timeLeft -= 0.1;
+    const pct = Math.max(0, (timeLeft / DISCUSSION_TIME) * 100);
+    fill.style.width = pct + '%';
+    if (pct < 15) fill.className = 'timer-fill danger';
+    else if (pct < 35) fill.className = 'timer-fill warning';
+
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      // Auto-advance to reveal
+      if (phase === 'choices') revealAnswer();
+    }
+  }, 100);
+}
+
+function toggleTimer() {
+  if (phase !== 'choices') return;
+  timerPaused = !timerPaused;
+  const fill = document.getElementById('timerFill');
+  if (timerPaused) fill.classList.add('paused');
+  else fill.classList.remove('paused');
+}
+
+// ============================
+// SCORE STRIP
+// ============================
+function updateScoreStrip() {
+  const strip = document.getElementById('scoreStrip');
+  const topScore = Math.max(...teams.map(t => t.score), 0);
+  strip.innerHTML = teams.map(t => `
+    <div class="strip-team ${t.score === topScore && topScore > 0 ? 'leading' : ''}">
+      <span class="strip-emoji">${t.emoji}</span>
+      <span class="strip-name">${t.name}</span>
+      <span class="strip-score">${t.score}</span>
+    </div>
+  `).join('');
+}
+
+// ============================
+// CONFETTI
+// ============================
+function launchConfetti() {
+  const container = document.getElementById('confettiContainer');
+  const colors = ['#0A84FF', '#30D158', '#FF9F0A', '#FF453A', '#BF5AF2', '#64D2FF', '#FFD60A'];
+  for (let i = 0; i < 80; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + '%';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.animationDuration = (2 + Math.random() * 3) + 's';
+    piece.style.animationDelay = Math.random() * 2 + 's';
+    piece.style.width = (6 + Math.random() * 8) + 'px';
+    piece.style.height = (6 + Math.random() * 8) + 'px';
+    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    container.appendChild(piece);
+  }
+  setTimeout(() => container.innerHTML = '', 6000);
+}
+
+// ============================
+// SHUFFLE
+// ============================
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+</script>
+</body>
+</html>
