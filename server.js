@@ -560,7 +560,14 @@ function handleTeacherMessage(msg) {
   }
 
   if (msg.type === 'advance') {
-    if (gameState.phase === 'story') {
+    if (gameState.status === 'scoreboard') {
+      // Advance from scoreboard to next round
+      gameState.status = 'playing';
+      gameState.phase = 'story';
+      gameState.roundAnswers = [];
+      gameState.answerMap = shuffle([0, 1, 2, 3]);
+      broadcastGameState();
+    } else if (gameState.phase === 'story') {
       gameState.phase = 'choices';
       gameState.roundAnswers = [];
       gameState.answerMap = shuffle([0, 1, 2, 3]);
@@ -1040,12 +1047,7 @@ ws.onmessage = (e) => {
 document.addEventListener('keydown', (e) => {
   if (e.code === 'Space' || e.code === 'Enter') {
     e.preventDefault();
-    if (state.status === 'scoreboard') {
-      ws.send(JSON.stringify({ type: 'advance' }));
-      // Move to next round
-      state.status = 'playing';
-      state.phase = 'story';
-    } else if (state.status === 'playing') {
+    if (state.status === 'scoreboard' || state.status === 'playing') {
       ws.send(JSON.stringify({ type: 'advance' }));
     }
   }
